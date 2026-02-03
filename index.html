@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Flags CTF - Cybersécurité</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #1e40af;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #1e40af;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            background: #1e40af;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #1e40af;
+            border-bottom: 3px solid #0f172a;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        h3 {
+            color: #0f172a;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .defi-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #1e40af;
+            transition: transform 0.3s;
+        }
+
+        .defi-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.3);
+        }
+
+        .defi-number {
+            background: #1e40af;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .red-flag {
+            background: #ffe6e6;
+            border-left: 4px solid #ff4444;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .red-flag strong {
+            color: #cc0000;
+        }
+
+        .methode {
+            background: #e6f3ff;
+            border-left: 4px solid #4444ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .risque {
+            background: #fff3e6;
+            border-left: 4px solid #ff8800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .solution {
+            background: #e6ffe6;
+            border-left: 4px solid #00cc00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .tool-card {
+            background: white;
+            border: 2px solid #1e40af;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tool-card h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .badge-danger {
+            background: #ff4444;
+            color: white;
+        }
+
+        .badge-info {
+            background: #4444ff;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ff8800;
+            color: white;
+        }
+
+        .badge-success {
+            background: #00cc00;
+            color: white;
+        }
+
+        /* CTF Styles */
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #1e40af;
+            font-size: 1.1em;
+        }
+
+        .progress-container {
+            background: #e5e7eb;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .challenge-selector {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .challenge-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .challenge-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .challenge-btn.unlocked {
+            background: #1e40af;
+            color: white;
+        }
+
+        .challenge-btn.unlocked:hover {
+            background: #1e3a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.4);
+        }
+
+        .challenge-btn.completed {
+            background: #10b981;
+            color: white;
+        }
+
+        .challenge-btn.completed::after {
+            content: "✓";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+        }
+
+        .challenge-btn.locked {
+            background: #9ca3af;
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .challenge-btn.locked::after {
+            content: "🔒";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .challenge-btn.active-challenge {
+            box-shadow: 0 0 0 3px #fbbf24;
+        }
+
+        .challenge-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .challenge-header {
+            border-bottom: 3px solid #1e40af;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .challenge-title {
+            color: #1e40af;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .challenge-description {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .challenge-body {
+            margin: 25px 0;
+        }
+
+        .hint-box {
+            background: #fef3c7;
+            border-left: 4px solid #fbbf24;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .hint-box strong {
+            color: #b45309;
+        }
+
+        .flag-input-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 2px solid #1e40af;
+        }
+
+        .flag-input-title {
+            color: #1e40af;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .flag-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .flag-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #1e40af;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+        }
+
+        .flag-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .submit-btn {
+            padding: 12px 30px;
+            background: #1e40af;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #1e3a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.4);
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+            display: block;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+            display: block;
+        }
+
+        .challenge-info {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .challenge-info h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .congratulations {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .congratulations h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+            border: none;
+        }
+
+        /* Admin Styles */
+        .admin-login {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .admin-login h3 {
+            color: #1e40af;
+            margin-bottom: 30px;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #1e40af;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.unlocked {
+            display: block;
+        }
+
+        .flag-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .flag-table th {
+            background: #1e40af;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .flag-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .flag-table tr:hover {
+            background: #f3f4f6;
+        }
+
+        .copy-btn {
+            padding: 5px 15px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #059669;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            .challenge-buttons {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .flag-input-container {
+                flex-direction: column;
+            }
+
+            .defi-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ Red Flags en Cybersécurité</h1>
+            <p class="subtitle">Challenges Kids - Partie 1 : Web (Défis 1 à 8)</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a onclick="showSection('introduction')" class="active">Introduction</a></li>
+                <li><a onclick="showSection('defis')">Les Défis</a></li>
+                <li><a onclick="showSection('ctf')">CTF Interactif</a></li>
+                <li><a onclick="showSection('aide')">Aide & Outils</a></li>
+                <li><a onclick="showSection('conclusion')">Conclusion</a></li>
+                <li><a onclick="showSection('admin')">🔒 Admin</a></li>
+            </ul>
+        </nav>
+
+        <!-- INTRODUCTION -->
+        <section id="introduction" class="section active">
+            <h2>📋 Introduction</h2>
+            <p>Ce site présente notre travail sur l'identification des <strong>Red Flags</strong> en cybersécurité, réalisé dans le cadre des Challenges Kids. Un Red Flag est un indice révélant une faille de sécurité ou une pratique à risque sur un site internet.</p>
+            <p style="margin-top: 15px;"><strong>Objectifs :</strong></p>
+            <ul>
+                <li>Identifier les vulnérabilités web courantes</li>
+                <li>Comprendre les risques associés en contexte professionnel</li>
+                <li>Proposer des solutions techniques (Blue Team)</li>
+            </ul>
+        </section>
+
+        <!-- LES DÉFIS -->
+        <section id="defis" class="section">
+            <h2>🎯 Les Défis (1 à 8)</h2>
+
+            <!-- DÉFI 1 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 1</span>
+                <h3>Inspection du Code Source</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Commentaires sensibles dans le code source HTML<br>
+                    <strong>Localisation :</strong> Commentaires HTML visibles via l'inspecteur (F12)
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> Inspecteur de navigateur (DevTools)<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Clic droit > "Inspecter" ou touche F12</li>
+                        <li>Rechercher les commentaires HTML (&lt;!-- ... --&gt;)</li>
+                        <li>Identifier les informations sensibles</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> Les développeurs laissent parfois des informations sensibles (mots de passe, clés API, TODOs) dans les commentaires HTML. Ces informations sont accessibles à tous les utilisateurs.
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Supprimer tous les commentaires sensibles avant la mise en production. Utiliser des variables d'environnement pour les secrets. Mettre en place un processus de revue de code.
+                </div>
+            </div>
+
+            <!-- DÉFI 2 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 2</span>
+                <h3>Décodage Base64</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Utilisation de Base64 pour "protéger" des données sensibles<br>
+                    <strong>Localisation :</strong> Messages encodés en Base64 dans le code source
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> CyberChef, décodeur Base64 en ligne<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Identifier une chaîne en Base64 (caractères alphanumériques + = à la fin)</li>
+                        <li>Utiliser CyberChef avec la recette "From Base64"</li>
+                        <li>Décoder et lire le message en clair</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> Base64 n'est PAS un chiffrement ! C'est un simple encodage facilement réversible. Utiliser Base64 pour "cacher" des mots de passe ou tokens est inefficace et dangereux.
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Utiliser de vrais algorithmes de chiffrement (AES-256, RSA). Ne jamais confondre encodage et chiffrement. Implémenter un système de gestion des secrets sécurisé.
+                </div>
+            </div>
+
+            <!-- DÉFI 3 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 3</span>
+                <h3>Paramètres URL (GET)</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Données sensibles transmises via les paramètres GET dans l'URL<br>
+                    <strong>Localisation :</strong> Barre d'adresse du navigateur (?param=valeur)
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> Observation de l'URL, inspecteur réseau<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Observer la barre d'adresse après une action</li>
+                        <li>Identifier les paramètres GET (?key=value)</li>
+                        <li>Analyser les informations exposées</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> Les URLs sont enregistrées dans l'historique du navigateur, les logs serveur, et peuvent être interceptées. Transmettre des mots de passe ou tokens via GET est une faille critique.
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Utiliser POST pour les données sensibles. Implémenter HTTPS obligatoire. Utiliser des tokens de session sécurisés avec HttpOnly et Secure flags. Ne jamais passer de credentials en URL.
+                </div>
+            </div>
+
+            <!-- DÉFI 4 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 4</span>
+                <h3>Cookies Non Sécurisés</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Cookies stockant des données sensibles en clair, sans attributs de sécurité<br>
+                    <strong>Localisation :</strong> DevTools > Application/Storage > Cookies
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> Inspecteur (DevTools) > onglet Application<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Ouvrir DevTools (F12)</li>
+                        <li>Aller dans Application > Cookies</li>
+                        <li>Examiner les cookies, leurs valeurs et attributs</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> Les cookies sans attributs Secure, HttpOnly et SameSite sont vulnérables aux attaques XSS (vol de session) et CSRF. Les données peuvent être interceptées ou manipulées.
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Toujours utiliser les flags Secure (HTTPS uniquement), HttpOnly (pas accessible en JavaScript), et SameSite (protection CSRF). Chiffrer les données sensibles dans les cookies.
+                </div>
+            </div>
+
+            <!-- DÉFI 5 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 5</span>
+                <h3>Console JavaScript</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Logs de debug contenant des informations sensibles laissés en production<br>
+                    <strong>Localisation :</strong> Console JavaScript (F12 > Console)
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> Console JavaScript du navigateur<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Ouvrir la Console (F12 > onglet Console)</li>
+                        <li>Observer les messages console.log()</li>
+                        <li>Identifier les données sensibles exposées</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> Les console.log() en production peuvent exposer des données utilisateur, tokens d'authentification, requêtes API complètes, structure de la base de données, etc. Tout est visible par les utilisateurs.
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Supprimer tous les console.log() avant déploiement. Utiliser des outils de logging côté serveur avec contrôle d'accès. Activer le mode production qui désactive automatiquement les logs.
+                </div>
+            </div>
+
+            <!-- DÉFI 6 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 6</span>
+                <h3>Chiffrement Faible (ROT13)</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Utilisation d'algorithmes de chiffrement obsolètes ou faibles (ROT13, Caesar)<br>
+                    <strong>Localisation :</strong> Messages chiffrés avec des méthodes anciennes
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> CyberChef (recette ROT13), décodeurs en ligne<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Identifier un chiffrement par substitution (lettres remplacées)</li>
+                        <li>Tester ROT13 dans CyberChef</li>
+                        <li>Décoder le message en clair</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> ROT13 et autres chiffrements par substitution simple sont cassables instantanément. Aucune protection réelle des données. Un attaquant peut lire toutes les informations "protégées".
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Utiliser des algorithmes modernes et éprouvés : AES-256 pour le chiffrement symétrique, RSA-2048+ pour l'asymétrique. Suivre les recommandations NIST/ANSSI.
+                </div>
+            </div>
+
+            <!-- DÉFI 7 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 7</span>
+                <h3>Éléments HTML Cachés</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Données sensibles "cachées" uniquement avec CSS (display: none, visibility: hidden)<br>
+                    <strong>Localisation :</strong> Code HTML avec styles CSS de masquage
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> Inspecteur de navigateur<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Inspecter le code HTML de la page (F12)</li>
+                        <li>Chercher des éléments avec display:none ou hidden</li>
+                        <li>Lire le contenu des éléments masqués</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> Cacher des éléments avec CSS ne les supprime pas du DOM ! Ils restent accessibles via l'inspecteur. Ne jamais "cacher" des secrets, données utilisateurs, ou fonctionnalités admin ainsi.
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Ne jamais envoyer de données sensibles au client si elles ne doivent pas être vues. Gérer les permissions et l'accès côté serveur uniquement. Principe du moindre privilège.
+                </div>
+            </div>
+
+            <!-- DÉFI 8 -->
+            <div class="defi-card">
+                <span class="defi-number">Défi 8</span>
+                <h3>Code JavaScript Exposé</h3>
+               
+                <div class="red-flag">
+                    <span class="badge badge-danger">🚩 RED FLAG</span>
+                    <strong>Faille identifiée :</strong> Secrets ou clés API stockés directement dans le code JavaScript client<br>
+                    <strong>Localisation :</strong> Fichiers .js ou balises &lt;script&gt; dans le code source
+                </div>
+
+                <div class="methode">
+                    <span class="badge badge-info">🔍 MÉTHODE</span>
+                    <strong>Outils utilisés :</strong> Afficher le code source (Ctrl+U), inspecteur > Sources<br>
+                    <strong>Démarche :</strong>
+                    <ul>
+                        <li>Afficher le code source de la page</li>
+                        <li>Examiner les fichiers JavaScript</li>
+                        <li>Rechercher des variables contenant des secrets</li>
+                    </ul>
+                </div>
+
+                <div class="risque">
+                    <span class="badge badge-warning">⚠️ RISQUE</span>
+                    <strong>En contexte professionnel :</strong> Tout le code JavaScript est téléchargé et lisible côté client, même minifié. Stocker des clés API, tokens, ou secrets dans le JS expose ces informations à tous les utilisateurs et bots.
+                </div>
+
+                <div class="solution">
+                    <span class="badge badge-success">✅ SOLUTION</span>
+                    <strong>Mesure Blue Team :</strong> Gérer les secrets côté serveur uniquement. Utiliser des variables d'environnement. Pour les API publiques, utiliser des restrictions par domaine/IP, rate limiting, et des API keys avec scopes limités.
+                </div>
+            </div>
+        </section>
+
+        <!-- CTF INTERACTIF -->
+        <section id="ctf" class="section">
+            <h2>🎮 CTF Interactif</h2>
+            <p style="margin-bottom: 30px;">Teste tes compétences ! Résous chaque défi pour débloquer le suivant. 🚀</p>
+
+            <div class="progress-bar">
+                <div class="progress-text">Progression : <span id="progress-count">0</span> / 8 défis complétés</div>
+                <div class="progress-container">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div>
+                </div>
+            </div>
+
+            <div class="challenge-selector">
+                <div class="challenge-buttons" id="challenge-buttons">
+                    <button class="challenge-btn unlocked active-challenge" data-challenge="1">Défi 1</button>
+                    <button class="challenge-btn locked" data-challenge="2">Défi 2</button>
+                    <button class="challenge-btn locked" data-challenge="3">Défi 3</button>
+                    <button class="challenge-btn locked" data-challenge="4">Défi 4</button>
+                    <button class="challenge-btn locked" data-challenge="5">Défi 5</button>
+                    <button class="challenge-btn locked" data-challenge="6">Défi 6</button>
+                    <button class="challenge-btn locked" data-challenge="7">Défi 7</button>
+                    <button class="challenge-btn locked" data-challenge="8">Défi 8</button>
+                </div>
+            </div>
+
+            <div id="challenge-container">
+                <!-- Le contenu du défi sera inséré ici par JavaScript -->
+            </div>
+
+            <div id="congratulations-section" class="hidden">
+                <div class="congratulations">
+                    <h2>🎉 Félicitations ! 🎉</h2>
+                    <p style="font-size: 1.3em; margin-bottom: 20px;">Tu as complété les 8 défis avec succès !</p>
+                    <p>Tu es maintenant un expert en détection de Red Flags en cybersécurité ! 🛡️</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AIDE & OUTILS -->
+        <section id="aide" class="section">
+            <h2>🛠️ Aide & Outils Utilisés</h2>
+
+            <div class="tool-card">
+                <h4>🔍 Inspecteur de navigateur (DevTools)</h4>
+                <p><strong>Rôle :</strong> Examiner le code source HTML, CSS, JavaScript d'une page web.</p>
+                <p><strong>Fonctionnement :</strong> Clic droit > "Inspecter" ou F12. Permet de voir les requêtes réseau, les cookies, le code source.</p>
+                <p><strong>Utilisation :</strong> Identifier des commentaires cachés, des scripts malveillants, des données sensibles exposées.</p>
+            </div>
+
+            <div class="tool-card">
+                <h4>🔐 CyberChef</h4>
+                <p><strong>Rôle :</strong> Outil de décodage/encodage et manipulation de données.</p>
+                <p><strong>Fonctionnement :</strong> Interface web permettant d'appliquer différentes "recettes" (Base64, ROT13, hachage, etc.).</p>
+                <p><strong>Utilisation :</strong> Décoder des messages cachés, analyser des hash, convertir des formats.</p>
+                <p><strong>Lien :</strong> <a href="https://www.challenges-kids.fr/cyberchef/" target="_blank" style="color: #1e40af;">CyberChef Challenges Kids</a></p>
+            </div>
+
+            <div class="tool-card">
+                <h4>🌐 Analyse d'URL</h4>
+                <p><strong>Rôle :</strong> Examiner la structure d'une URL pour repérer des anomalies.</p>
+                <p><strong>Fonctionnement :</strong> Vérifier le protocole (http/https), le domaine, les paramètres GET.</p>
+                <p><strong>Utilisation :</strong> Détecter des tentatives de phishing, des injections SQL dans les paramètres.</p>
+            </div>
+
+            <div class="tool-card">
+                <h4>📝 Analyse du code source</h4>
+                <p><strong>Rôle :</strong> Lire le code HTML/JS pour identifier des failles.</p>
+                <p><strong>Fonctionnement :</strong> Ctrl+U ou clic droit > "Afficher le code source".</p>
+                <p><strong>Utilisation :</strong> Trouver des commentaires de développeurs, des mots de passe en clair, des scripts vulnérables.</p>
+            </div>
+
+            <div class="tool-card">
+                <h4>🍪 Cookies et stockage local</h4>
+                <p><strong>Rôle :</strong> Examiner les données stockées côté client.</p>
+                <p><strong>Fonctionnement :</strong> DevTools > Application/Storage > Cookies/Local Storage.</p>
+                <p><strong>Utilisation :</strong> Identifier des tokens non sécurisés, des sessions vulnérables.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">📚 Ressources supplémentaires</h3>
+            <ul>
+                <li><a href="https://www.challenges-kids.fr/categories/aide/" target="_blank" style="color: #1e40af;">Page d'aide Challenges Kids</a></li>
+                <li>OWASP Top 10 - Les vulnérabilités web les plus critiques</li>
+                <li>Documentation sur les en-têtes HTTP sécurisés</li>
+            </ul>
+        </section>
+
+        <!-- CONCLUSION -->
+        <section id="conclusion" class="section">
+            <h2>🎓 Conclusion</h2>
+            <p>À travers ces 8 défis, nous avons appris à :</p>
+            <ul>
+                <li>✅ Identifier méthodiquement des Red Flags sur des sites web</li>
+                <li>✅ Utiliser des outils professionnels de cybersécurité</li>
+                <li>✅ Comprendre les risques réels en contexte professionnel</li>
+                <li>✅ Proposer des solutions techniques concrètes (Blue Team)</li>
+            </ul>
+            <p style="margin-top: 20px;"><strong>Leçon principale :</strong> La cybersécurité n'est pas seulement technique - c'est aussi une question de méthodologie, de vigilance et de compréhension des risques humains.</p>
+        </section>
+
+        <!-- ADMIN -->
+        <section id="admin" class="section">
+            <div class="admin-login" id="admin-login">
+                <h3>🔒 Accès Staff</h3>
+                <p style="margin-bottom: 20px; color: #666;">Entrez le mot de passe administrateur</p>
+                <input type="password"
+                       class="admin-input"
+                       id="admin-password"
+                       placeholder="Mot de passe"
+                       onkeypress="if(event.key === 'Enter') unlockAdmin()">
+                <button class="submit-btn" onclick="unlockAdmin()">Déverrouiller</button>
+                <div class="message" id="admin-message"></div>
+            </div>
+
+            <div class="admin-content" id="admin-content">
+                <h2>🔓 Panel Admin - Tous les Flags</h2>
+                <p style="margin-bottom: 20px;">Liste complète des flags pour validation :</p>
+
+                <table class="flag-table">
+                    <thead>
+                        <tr>
+                            <th>Défi</th>
+                            <th>Titre</th>
+                            <th>Flag</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Défi 1</strong></td>
+                            <td>Inspection du Code Source</td>
+                            <td><code>FLAG{1nsp3ct_th3_s0urc3_c0d3}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{1nsp3ct_th3_s0urc3_c0d3}')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Défi 2</strong></td>
+                            <td>Décodage Base64</td>
+                            <td><code>FLAG{b4s364_1s_n0t_s3cur1ty}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{b4s364_1s_n0t_s3cur1ty}')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Défi 3</strong></td>
+                            <td>URL Parameters</td>
+                            <td><code>FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Défi 4</strong></td>
+                            <td>Cookies Non Sécurisés</td>
+                            <td><code>FLAG{c00k13s_4r3_n0t_s4f3}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{c00k13s_4r3_n0t_s4f3}')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Défi 5</strong></td>
+                            <td>Console JavaScript</td>
+                            <td><code>FLAG{c0ns0l3_l0gs_l34k_d4t4}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{c0ns0l3_l0gs_l34k_d4t4}')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Défi 6</strong></td>
+                            <td>ROT13 Cipher</td>
+                            <td><code>FLAG{r0t13_is_too_weak}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{r0t13_is_too_weak}')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Défi 7</strong></td>
+                            <td>Hidden Div</td>
+                            <td><code>FLAG{h1dd3n_3l3m3nts_4r3_v1s1bl3}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{h1dd3n_3l3m3nts_4r3_v1s1bl3}')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Défi 8</strong></td>
+                            <td>JavaScript Source Code</td>
+                            <td><code>FLAG{j4v4scr1pt_1s_publ1c}</code></td>
+                            <td><button class="copy-btn" onclick="copyFlag('FLAG{j4v4scr1pt_1s_publ1c}')">Copier</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 10px; border-left: 4px solid #fbbf24;">
+                    <strong>⚠️ Attention :</strong> Ces informations sont réservées au staff uniquement. Ne pas partager les flags avec les participants !
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>🛡️ Projet réalisé dans le cadre de la Séquence 2 - Cybersécurité sur le web</p>
+            <p style="margin-top: 10px; color: #666;">Challenges Kids - Partie 1 : Web (Défis 1 à 8)</p>
+        </footer>
+    </div>
+
+    <script>
+        // Base de données des défis
+        const challenges = {
+            1: {
+                title: "Défi 1 : Inspection du Code Source",
+                description: "Le premier Red Flag se cache dans le code source HTML de cette page...",
+                content: `
+                    <p>Bienvenue dans ton premier défi ! 👋</p>
+                    <p>Un développeur a laissé un commentaire dans le code source de cette page. Trouve-le !</p>
+                   
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> Utilise l'inspecteur de ton navigateur (F12 ou clic droit > "Inspecter") pour voir le code source HTML de cette page. Cherche les commentaires HTML (ils commencent par &lt;!-- et finissent par --&gt;)
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Commentaires sensibles dans le code source HTML</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>Les développeurs laissent parfois des informations sensibles (mots de passe, clés API, TODOs) dans les commentaires HTML. Ces informations sont visibles par tout le monde !</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Supprimer tous les commentaires sensibles avant la mise en production. Utiliser des variables d'environnement pour les secrets.</p>
+                    </div>
+
+                    <!-- FLAG{1nsp3ct_th3_s0urc3_c0d3} -->
+                `,
+                flag: "FLAG{1nsp3ct_th3_s0urc3_c0d3}"
+            },
+            2: {
+                title: "Défi 2 : Décodage Base64",
+                description: "Un message est caché en Base64. Décode-le pour trouver le flag !",
+                content: `
+                    <p>Le développeur a essayé de cacher un flag en utilisant l'encodage Base64. 🔐</p>
+                   
+                    <div class="challenge-info">
+                        <h4>🔍 Message encodé :</h4>
+                        <code style="display: block; padding: 15px; margin: 10px 0;">RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ==</code>
+                    </div>
+
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> Base64 n'est PAS un système de chiffrement, c'est juste un encodage ! Utilise CyberChef ou un décodeur Base64 en ligne pour décoder ce message. Cherche "base64 decode" sur Google.
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Utilisation de Base64 pour "protéger" des données sensibles</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>Base64 n'est pas une méthode de sécurité ! C'est juste un encodage facilement réversible. Les données "protégées" avec Base64 sont accessibles à tous.</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Utiliser un vrai chiffrement (AES, RSA) pour protéger les données sensibles. Ne jamais confondre encodage et chiffrement.</p>
+                    </div>
+                `,
+                flag: "FLAG{b4s364_1s_n0t_s3cur1ty}"
+            },
+            3: {
+                title: "Défi 3 : URL Parameters",
+                description: "Analyse l'URL pour trouver le flag caché dans les paramètres GET !",
+                content: `
+                    <p>Regarde bien l'URL actuelle de cette page dans ton navigateur ! 🔗</p>
+                    <p>Un paramètre spécial a été ajouté... Si tu ne le vois pas, clique sur ce lien :</p>
+                    <p style="margin: 20px 0;">
+                        <a href="?secret=FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}"
+                           style="color: #1e40af; font-weight: bold; text-decoration: underline;">
+                           Clique ici pour révéler le paramètre caché
+                        </a>
+                    </p>
+
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> Regarde dans la barre d'adresse de ton navigateur après avoir cliqué sur le lien. Les paramètres GET commencent par un <code>?</code> et sont au format <code>nom=valeur</code>
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Données sensibles transmises via les paramètres GET dans l'URL</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>Les URLs sont enregistrées dans l'historique du navigateur, les logs serveur, et peuvent être interceptées. Ne jamais transmettre de mots de passe ou tokens via l'URL !</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Utiliser les méthodes POST pour les données sensibles, HTTPS obligatoire, et des tokens de session sécurisés avec HttpOnly et Secure flags.</p>
+                    </div>
+                `,
+                flag: "FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}"
+            },
+            4: {
+                title: "Défi 4 : Cookies Non Sécurisés",
+                description: "Inspecte les cookies de cette page pour trouver le flag !",
+                content: `
+                    <p>Un cookie a été créé sur cette page avec des informations sensibles... 🍪</p>
+
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> Ouvre les DevTools (F12), va dans l'onglet "Application" (Chrome) ou "Storage" (Firefox), puis regarde la section "Cookies". Tu trouveras un cookie nommé <code>secret_flag</code>
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Cookies stockant des données sensibles en clair, sans attributs de sécurité</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>Les cookies sans attributs Secure, HttpOnly et SameSite sont vulnérables aux attaques XSS et CSRF. Les données peuvent être volées ou manipulées.</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Toujours utiliser les flags Secure (HTTPS uniquement), HttpOnly (pas accessible en JS), et SameSite (protection CSRF). Chiffrer les données sensibles.</p>
+                    </div>
+                `,
+                flag: "FLAG{c00k13s_4r3_n0t_s4f3}"
+            },
+            5: {
+                title: "Défi 5 : Console JavaScript",
+                description: "Un message secret a été loggé dans la console JavaScript...",
+                content: `
+                    <p>Le développeur a laissé un message de debug dans la console ! 🖥️</p>
+
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> Ouvre la console JavaScript (F12 > onglet "Console") et regarde les messages. Un flag y a été loggé pour le Défi 5 !
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Logs de debug contenant des informations sensibles laissés en production</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>Les console.log() en production peuvent exposer des données utilisateur, tokens d'authentification, requêtes API, etc. Visible par tout le monde !</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Supprimer tous les console.log() avant le déploiement. Utiliser des outils de logging côté serveur avec contrôle d'accès. Activer le mode production qui désactive les logs.</p>
+                    </div>
+                `,
+                flag: "FLAG{c0ns0l3_l0gs_l34k_d4t4}"
+            },
+            6: {
+                title: "Défi 6 : ROT13 Cipher",
+                description: "Déchiffre ce message ROT13 pour obtenir le flag !",
+                content: `
+                    <p>ROT13 est un chiffrement par substitution très simple (et peu sûr !) 🔄</p>
+
+                    <div class="challenge-info">
+                        <h4>🔍 Message chiffré :</h4>
+                        <code style="display: block; padding: 15px; margin: 10px 0;">SYNT{e0g13_vf_gbb_jrnx}</code>
+                    </div>
+
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> ROT13 remplace chaque lettre par celle qui est 13 positions plus loin dans l'alphabet. Tu peux utiliser CyberChef avec la "recette" ROT13, ou un décodeur ROT13 en ligne.
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Utilisation d'algorithmes de chiffrement obsolètes ou faibles (ROT13, Caesar cipher)</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>ROT13 et autres chiffrements par substitution simple sont cassables en quelques secondes. Aucune protection réelle des données.</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Utiliser des algorithmes modernes et éprouvés : AES-256 pour le chiffrement symétrique, RSA pour l'asymétrique. Suivre les standards NIST.</p>
+                    </div>
+                `,
+                flag: "FLAG{r0t13_is_too_weak}"
+            },
+            7: {
+                title: "Défi 7 : Hidden Div",
+                description: "Un élément HTML est caché avec CSS... Trouve-le !",
+                content: `
+                    <p>Un div est masqué sur cette page avec <code>display: none</code>... 👻</p>
+
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> Utilise l'inspecteur (F12) pour examiner le code HTML de cette section. Cherche un élément avec l'attribut <code>style="display: none"</code> ou la classe <code>hidden</code>
+                    </div>
+
+                    <div style="display: none;" id="hidden-flag">
+                        🎉 Bravo ! Le flag est : FLAG{h1dd3n_3l3m3nts_4r3_v1s1bl3}
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Données sensibles "cachées" uniquement avec CSS (display: none, visibility: hidden)</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>Cacher des éléments avec CSS ne les supprime pas du DOM ! Ils restent accessibles via l'inspecteur et le code source. Ne jamais "cacher" des secrets ainsi.</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Ne jamais envoyer de données sensibles au client si elles ne doivent pas être vues. Gérer les permissions côté serveur, pas côté client.</p>
+                    </div>
+                `,
+                flag: "FLAG{h1dd3n_3l3m3nts_4r3_v1s1bl3}"
+            },
+            8: {
+                title: "Défi 8 : JavaScript Source Code",
+                description: "Le dernier flag est dans le code JavaScript de cette page !",
+                content: `
+                    <p>Le flag final est stocké dans une variable JavaScript... 🎯</p>
+
+                    <div class="hint-box">
+                        <strong>💡 Indice :</strong> Regarde dans le code source JavaScript de cette page (utilise Ctrl+U ou "Afficher le code source"). Cherche une variable qui contient le mot "finalFlag". Tu peux aussi chercher dans l'inspecteur > onglet "Sources" ou "Debugger".
+                    </div>
+
+                    <div class="challenge-info">
+                        <h4>📚 Red Flag identifié :</h4>
+                        <p>Secrets ou clés API stockés directement dans le code JavaScript client</p>
+                       
+                        <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
+                        <p>Tout le code JavaScript est téléchargé et exécuté côté client. N'importe qui peut le lire, même minifié. Ne JAMAIS y mettre de clés API, tokens, ou secrets.</p>
+                       
+                        <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
+                        <p>Gérer les secrets côté serveur uniquement. Utiliser des variables d'environnement. Pour les API publiques, utiliser des restrictions par domaine/IP et des rate limiting.</p>
+                    </div>
+
+                    <p style="margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 10px; border-left: 4px solid #fbbf24;">
+                        <strong>🎊 Dernier défi !</strong> Une fois validé, tu auras complété tous les défis du CTF ! Bravo pour ta persévérance ! 🚩
+                    </p>
+                `,
+                flag: "FLAG{j4v4scr1pt_1s_publ1c}"
+            }
+        };
+
+        // Variable contenant le flag final (pour le défi 8)
+        const finalFlag = "FLAG{j4v4scr1pt_1s_publ1c}";
+
+        // État du jeu
+        let currentChallenge = 1;
+        let completedChallenges = new Set();
+
+        // Navigation entre sections
+        function showSection(sectionId) {
+            // Masquer toutes les sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+           
+            // Afficher la section demandée
+            document.getElementById(sectionId).classList.add('active');
+           
+            // Mettre à jour le menu
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+           
+            // Si on va sur CTF, initialiser si nécessaire
+            if (sectionId === 'ctf' && !document.getElementById('challenge-container').innerHTML) {
+                loadChallenge(1);
+            }
+           
+            // Scroll vers le haut
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Créer un cookie pour le défi 4
+            document.cookie = "secret_flag=FLAG{c00k13s_4r3_n0t_s4f3}; path=/";
+           
+            // Logger dans la console pour le défi 5
+            console.log("🚩 Défi 5 - Flag pour toi :", "FLAG{c0ns0l3_l0gs_l34k_d4t4}");
+           
+            // Gérer les clics sur les boutons de défi
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('challenge-btn')) {
+                    const challengeNum = parseInt(e.target.dataset.challenge);
+                    if (!e.target.classList.contains('locked')) {
+                        loadChallenge(challengeNum);
+                    }
+                }
+            });
+        });
+
+        function loadChallenge(num) {
+            currentChallenge = num;
+            const challenge = challenges[num];
+           
+            // Mettre à jour les boutons
+            document.querySelectorAll('.challenge-btn').forEach(btn => {
+                btn.classList.remove('active-challenge');
+                if (parseInt(btn.dataset.challenge) === num) {
+                    btn.classList.add('active-challenge');
+                }
+            });
+           
+            // Afficher le contenu du défi
+            const container = document.getElementById('challenge-container');
+            container.innerHTML = `
+                <div class="challenge-content">
+                    <div class="challenge-header">
+                        <div class="challenge-title">${challenge.title}</div>
+                        <div class="challenge-description">${challenge.description}</div>
+                    </div>
+                    <div class="challenge-body">
+                        ${challenge.content}
+                    </div>
+                    <div class="flag-input-section">
+                        <div class="flag-input-title">🚩 Valider le flag :</div>
+                        <div class="flag-input-container">
+                            <input type="text"
+                                   class="flag-input"
+                                   id="flag-input-${num}"
+                                   placeholder="FLAG{...}"
+                                   autocomplete="off">
+                            <button class="submit-btn" onclick="validateFlag(${num})">Valider</button>
+                        </div>
+                        <div class="message" id="message-${num}"></div>
+                    </div>
+                </div>
+            `;
+           
+            // Focus sur l'input
+            setTimeout(() => {
+                document.getElementById(`flag-input-${num}`).focus();
+            }, 100);
+           
+            // Permettre la validation avec Entrée
+            document.getElementById(`flag-input-${num}`).addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    validateFlag(num);
+                }
+            });
+        }
+
+        function validateFlag(challengeNum) {
+            const input = document.getElementById(`flag-input-${challengeNum}`);
+            const message = document.getElementById(`message-${challengeNum}`);
+            const userFlag = input.value.trim();
+            const correctFlag = challenges[challengeNum].flag;
+           
+            if (userFlag === correctFlag) {
+                // Flag correct !
+                message.className = 'message success';
+                message.textContent = '✅ Bravo ! Flag correct ! Le défi suivant est maintenant débloqué ! 🎉';
+               
+                // Marquer comme complété
+                completedChallenges.add(challengeNum);
+               
+                // Mettre à jour le bouton
+                const btn = document.querySelector(`[data-challenge="${challengeNum}"]`);
+                btn.classList.remove('unlocked');
+                btn.classList.add('completed');
+               
+                // Débloquer le défi suivant
+                if (challengeNum < 8) {
+                    const nextBtn = document.querySelector(`[data-challenge="${challengeNum + 1}"]`);
+                    nextBtn.classList.remove('locked');
+                    nextBtn.classList.add('unlocked');
+                   
+                    // Charger automatiquement le défi suivant après 2 secondes
+                    setTimeout(() => {
+                        loadChallenge(challengeNum + 1);
+                    }, 2000);
+                } else {
+                    // Tous les défis complétés !
+                    setTimeout(() => {
+                        showCongratulations();
+                    }, 2000);
+                }
+               
+                // Mettre à jour la barre de progression
+                updateProgress();
+               
+            } else {
+                // Flag incorrect
+                message.className = 'message error';
+                message.textContent = '❌ Flag incorrect ! Essaie encore... Relis bien les indices ! 💪';
+               
+                // Secouer l'input
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function updateProgress() {
+            const completed = completedChallenges.size;
+            const total = 8;
+            const percentage = (completed / total) * 100;
+           
+            document.getElementById('progress-count').textContent = completed;
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-fill').textContent = Math.round(percentage) + '%';
+        }
+
+        function showCongratulations() {
+            document.getElementById('challenge-container').classList.add('hidden');
+            document.getElementById('congratulations-section').classList.remove('hidden');
+           
+            // Scroll vers le message de félicitations
+            document.getElementById('congratulations-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Admin functions
+        function unlockAdmin() {
+            const password = document.getElementById('admin-password').value;
+            const message = document.getElementById('admin-message');
+           
+            if (password === 'KMN2008') {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-content').classList.add('unlocked');
+            } else {
+                message.className = 'message error';
+                message.textContent = '❌ Mot de passe incorrect !';
+               
+                // Secouer l'input
+                const input = document.getElementById('admin-password');
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function copyFlag(flag) {
+            navigator.clipboard.writeText(flag).then(() => {
+                alert('✅ Flag copié : ' + flag);
+            });
+        }
+    </script>
+</body>
+</html>
