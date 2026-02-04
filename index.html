@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Red Flags CTF - Cybersécurité</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,47 +13,88 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
-            color: #333;
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 64, 175, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(30, 64, 175, 0.3) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(15, 23, 42, 0.5) 0px, transparent 50%);
+            color: #1e293b;
+            line-height: 1.7;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 40px;
         }
 
+        /* Header Hero */
         header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 60px 40px;
+            border-radius: 30px;
+            margin: 40px auto;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.1);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         h1 {
-            color: #1e40af;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
         }
 
         .subtitle {
-            color: #666;
-            font-size: 1.2em;
+            color: #94a3b8;
+            font-size: 1.3em;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
         }
 
+        /* Navigation */
         nav {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin: 30px auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            position: relative;
             z-index: 100;
         }
 
@@ -61,32 +103,69 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
         }
 
         nav a {
-            color: #1e40af;
+            color: #cbd5e1;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: all 0.3s;
+            padding: 14px 28px;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 600;
             cursor: pointer;
+            font-size: 0.95em;
+            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            opacity: 1;
         }
 
         nav a:hover, nav a.active {
-            background: #1e40af;
             color: white;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
         }
 
+        /* Section */
         .section {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 50px;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.5);
             display: none;
+            animation: fadeInUp 0.6s ease-out;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section.active {
@@ -94,411 +173,550 @@
         }
 
         h2 {
-            color: #1e40af;
-            border-bottom: 3px solid #0f172a;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 2em;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: -0.02em;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, transparent);
+            border-radius: 2px;
         }
 
         h3 {
-            color: #0f172a;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-size: 1.5em;
+            color: #1e293b;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
+        p {
+            color: #475569;
+            font-size: 1.05em;
+            margin-bottom: 15px;
+        }
+
+        /* Defi Cards */
         .defi-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border-left: 5px solid #1e40af;
-            transition: transform 0.3s;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3b82f6;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .defi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
         }
 
         .defi-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.3);
+            transform: translateX(10px) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59,130,246,0.2);
+            border-left-width: 8px;
         }
 
         .defi-number {
-            background: #1e40af;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
             display: inline-block;
-            margin-bottom: 15px;
-            font-weight: bold;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 0.95em;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+        }
+
+        /* Info Boxes */
+        .red-flag, .methode, .risque, .solution {
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .red-flag:hover, .methode:hover, .risque:hover, .solution:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         .red-flag {
-            background: #ffe6e6;
-            border-left: 4px solid #ff4444;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left-color: #ef4444;
         }
 
         .red-flag strong {
-            color: #cc0000;
+            color: #dc2626;
         }
 
         .methode {
-            background: #e6f3ff;
-            border-left: 4px solid #4444ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left-color: #3b82f6;
         }
 
         .risque {
-            background: #fff3e6;
-            border-left: 4px solid #ff8800;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left-color: #f59e0b;
         }
 
         .solution {
-            background: #e6ffe6;
-            border-left: 4px solid #00cc00;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left-color: #10b981;
         }
 
         .tool-card {
             background: white;
-            border: 2px solid #1e40af;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border: 2px solid #e0e7ff;
+            padding: 30px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            transition: all 0.4s;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .tool-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59,130,246,0.15);
         }
 
         .tool-card h4 {
             color: #1e40af;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: 600;
         }
 
         code {
-            background: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 3px;
+            background: #1e293b;
+            color: #22d3ee;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-family: 'Courier New', monospace;
-            color: #d63384;
+            font-size: 0.9em;
+            font-weight: 500;
         }
 
         ul {
-            margin-left: 20px;
-            margin-top: 10px;
+            margin-left: 25px;
+            margin-top: 15px;
         }
 
         li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            color: #475569;
+            line-height: 1.8;
         }
 
         .badge {
             display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
-            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 700;
             margin-right: 10px;
+            letter-spacing: 0.03em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .badge-danger {
-            background: #ff4444;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
         }
 
         .badge-info {
-            background: #4444ff;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
         }
 
         .badge-warning {
-            background: #ff8800;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
             color: white;
         }
 
         .badge-success {
-            background: #00cc00;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
         }
 
         /* CTF Styles */
         .progress-bar {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(59,130,246,0.2);
         }
 
         .progress-text {
             text-align: center;
-            margin-bottom: 15px;
-            font-weight: bold;
+            margin-bottom: 20px;
+            font-weight: 700;
             color: #1e40af;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
 
         .progress-container {
-            background: #e5e7eb;
-            height: 30px;
-            border-radius: 15px;
+            background: #e2e8f0;
+            height: 35px;
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .progress-fill {
-            background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
             height: 100%;
-            transition: width 0.5s ease;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1.05em;
+            box-shadow: 0 2px 10px rgba(59,130,246,0.5);
         }
 
         .challenge-selector {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(59,130,246,0.2);
         }
 
         .challenge-buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
         }
 
         .challenge-btn {
-            padding: 15px;
+            padding: 18px;
             border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
+            border-radius: 14px;
+            font-size: 1.05em;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
         }
 
         .challenge-btn.unlocked {
-            background: #1e40af;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
         }
 
         .challenge-btn.unlocked:hover {
-            background: #1e3a8a;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.4);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(59,130,246,0.5);
         }
 
         .challenge-btn.completed {
-            background: #10b981;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
+            box-shadow: 0 4px 15px rgba(16,185,129,0.3);
         }
 
         .challenge-btn.completed::after {
             content: "✓";
             position: absolute;
-            right: 10px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.2em;
+            font-size: 1.3em;
         }
 
         .challenge-btn.locked {
-            background: #9ca3af;
-            color: #d1d5db;
+            background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+            color: #475569;
             cursor: not-allowed;
         }
 
         .challenge-btn.locked::after {
             content: "🔒";
             position: absolute;
-            right: 10px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .challenge-btn.active-challenge {
-            box-shadow: 0 0 0 3px #fbbf24;
+            box-shadow: 0 0 0 4px rgba(251,191,36,0.5);
+            transform: scale(1.05);
         }
 
         .challenge-content {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 35px;
+            border: 1px solid rgba(59,130,246,0.1);
         }
 
         .challenge-header {
-            border-bottom: 3px solid #1e40af;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e7ff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .challenge-title {
-            color: #1e40af;
-            font-size: 2em;
-            margin-bottom: 10px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         .challenge-description {
-            color: #666;
-            font-size: 1.1em;
+            color: #64748b;
+            font-size: 1.15em;
+            font-weight: 500;
         }
 
         .challenge-body {
-            margin: 25px 0;
+            margin: 30px 0;
         }
 
         .hint-box {
-            background: #fef3c7;
-            border-left: 4px solid #fbbf24;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 20px 25px;
+            margin: 25px 0;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(245,158,11,0.2);
         }
 
         .hint-box strong {
             color: #b45309;
+            font-weight: 700;
         }
 
         .flag-input-section {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 30px;
-            border: 2px solid #1e40af;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 30px;
+            border-radius: 18px;
+            margin-top: 35px;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 4px 20px rgba(59,130,246,0.15);
         }
 
         .flag-input-title {
             color: #1e40af;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            letter-spacing: -0.01em;
         }
 
         .flag-input-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .flag-input {
             flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #1e40af;
-            border-radius: 8px;
-            font-size: 1em;
+            padding: 16px 20px;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            font-size: 1.05em;
             font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+            background: white;
         }
 
         .flag-input:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.2);
+            transform: scale(1.02);
         }
 
         .submit-btn {
-            padding: 12px 30px;
-            background: #1e40af;
+            padding: 16px 35px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+            letter-spacing: 0.02em;
         }
 
         .submit-btn:hover {
-            background: #1e3a8a;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59,130,246,0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
         }
 
         .message {
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-weight: bold;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-weight: 600;
             display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.success {
-            background: #d1fae5;
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
             border: 2px solid #10b981;
             color: #065f46;
             display: block;
         }
 
         .message.error {
-            background: #fee2e2;
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
             border: 2px solid #ef4444;
             color: #991b1b;
             display: block;
         }
 
         .challenge-info {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 1px solid #e2e8f0;
         }
 
         .challenge-info h4 {
             color: #1e40af;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         .congratulations {
             text-align: center;
-            padding: 40px;
+            padding: 60px 40px;
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(16,185,129,0.4);
+            animation: celebrate 0.6s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .congratulations h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            font-size: 3em;
+            margin-bottom: 25px;
             color: white;
-            border: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: white;
+        }
+
+        .congratulations h2::after {
+            display: none;
         }
 
         /* Admin Styles */
         .admin-login {
-            max-width: 400px;
-            margin: 50px auto;
+            max-width: 450px;
+            margin: 80px auto;
             background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
             text-align: center;
+            border: 1px solid rgba(59,130,246,0.2);
         }
 
         .admin-login h3 {
-            color: #1e40af;
-            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 35px;
+            font-size: 2em;
         }
 
         .admin-input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #1e40af;
-            border-radius: 8px;
-            font-size: 1em;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            font-size: 1.05em;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+        }
+
+        .admin-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.2);
         }
 
         .admin-content {
@@ -511,49 +729,69 @@
 
         .flag-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         .flag-table th {
-            background: #1e40af;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
             color: white;
-            padding: 15px;
+            padding: 18px 20px;
             text-align: left;
-            font-weight: bold;
+            font-weight: 700;
+            letter-spacing: 0.02em;
         }
 
         .flag-table td {
-            padding: 15px;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            background: white;
         }
 
-        .flag-table tr:hover {
-            background: #f3f4f6;
+        .flag-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .flag-table tr:hover td {
+            background: #f8fafc;
         }
 
         .copy-btn {
-            padding: 5px 15px;
-            background: #10b981;
+            padding: 8px 18px;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.9em;
+            font-weight: 600;
             transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(16,185,129,0.2);
         }
 
         .copy-btn:hover {
-            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16,185,129,0.4);
         }
 
         footer {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
             text-align: center;
-            margin-top: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(59,130,246,0.2);
+            color: #cbd5e1;
+        }
+
+        footer p {
+            color: #cbd5e1;
         }
 
         .hidden {
@@ -566,9 +804,22 @@
             20%, 40%, 60%, 80% { transform: translateX(10px); }
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+
             h1 {
+                font-size: 2.2em;
+            }
+
+            h2 {
                 font-size: 1.8em;
+            }
+
+            header {
+                padding: 40px 25px;
             }
 
             nav ul {
@@ -586,14 +837,36 @@
             .defi-card:hover {
                 transform: none;
             }
+
+            .section {
+                padding: 30px 25px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🛡️ Red Flags en Cybersécurité</h1>
-            <p class="subtitle">Challenges Kids - Partie 1 : Web (Défis 1 à 8)</p>
+            <h1>🛡️ Red Flags CTF</h1>
+            <p class="subtitle">Cybersécurité Web • Challenges Kids • Partie 1</p>
         </header>
 
         <nav>
@@ -611,7 +884,7 @@
         <section id="introduction" class="section active">
             <h2>📋 Introduction</h2>
             <p>Ce site présente notre travail sur l'identification des <strong>Red Flags</strong> en cybersécurité, réalisé dans le cadre des Challenges Kids. Un Red Flag est un indice révélant une faille de sécurité ou une pratique à risque sur un site internet.</p>
-            <p style="margin-top: 15px;"><strong>Objectifs :</strong></p>
+            <p style="margin-top: 20px;"><strong>Objectifs :</strong></p>
             <ul>
                 <li>Identifier les vulnérabilités web courantes</li>
                 <li>Comprendre les risques associés en contexte professionnel</li>
@@ -625,265 +898,201 @@
 
             <!-- DÉFI 1 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 1</span>
+                <span class="defi-number">DÉFI 1</span>
                 <h3>Inspection du Code Source</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> Vous venez d'intégrer l'équipe de sécurité d'une startup. Lors d'un audit de routine, vous devez examiner le code source HTML d'une page web pour vérifier qu'aucune information sensible n'a été laissée par les développeurs. Votre mission : identifier si des commentaires HTML contiennent des données qui ne devraient pas être publiques.
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Commentaires sensibles dans le code source HTML<br>
-                    <strong>Localisation :</strong> Commentaires HTML visibles via l'inspecteur (F12)
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> Inspecteur de navigateur (DevTools)<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Clic droit > "Inspecter" ou touche F12</li>
-                        <li>Rechercher les commentaires HTML (&lt;!-- ... --&gt;)</li>
-                        <li>Identifier les informations sensibles</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Commentaires sensibles dans le code source HTML
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> Les développeurs laissent parfois des informations sensibles (mots de passe, clés API, TODOs) dans les commentaires HTML. Ces informations sont accessibles à tous les utilisateurs.
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    Les développeurs laissent parfois des informations sensibles (mots de passe, clés API, TODOs avec des détails confidentiels) dans les commentaires HTML. Ces informations sont accessibles à tous les utilisateurs qui inspectent le code source.
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Supprimer tous les commentaires sensibles avant la mise en production. Utiliser des variables d'environnement pour les secrets. Mettre en place un processus de revue de code.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Mettre en place un processus de revue de code systématique. Supprimer tous les commentaires sensibles avant la mise en production. Utiliser des variables d'environnement pour stocker les secrets. Former les développeurs aux bonnes pratiques de sécurité.
                 </div>
             </div>
 
             <!-- DÉFI 2 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 2</span>
+                <span class="defi-number">DÉFI 2</span>
                 <h3>Décodage Base64</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> En analysant le trafic réseau d'une application web, vous remarquez que des données sont transmises dans un format qui ressemble à du texte aléatoire avec des caractères alphanumériques et se terminant par "==". L'équipe de développement prétend que ces données sont "sécurisées" car encodées. Votre rôle : vérifier si l'encodage utilisé offre une réelle protection.
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Utilisation de Base64 pour "protéger" des données sensibles<br>
-                    <strong>Localisation :</strong> Messages encodés en Base64 dans le code source
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> CyberChef, décodeur Base64 en ligne<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Identifier une chaîne en Base64 (caractères alphanumériques + = à la fin)</li>
-                        <li>Utiliser CyberChef avec la recette "From Base64"</li>
-                        <li>Décoder et lire le message en clair</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Confusion entre encodage et chiffrement
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> Base64 n'est PAS un chiffrement ! C'est un simple encodage facilement réversible. Utiliser Base64 pour "cacher" des mots de passe ou tokens est inefficace et dangereux.
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    Base64 est un encodage, pas un chiffrement. Il est réversible en quelques secondes. Utiliser Base64 pour "protéger" des mots de passe, tokens ou données sensibles donne une fausse impression de sécurité alors que les données sont accessibles à tous.
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Utiliser de vrais algorithmes de chiffrement (AES-256, RSA). Ne jamais confondre encodage et chiffrement. Implémenter un système de gestion des secrets sécurisé.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Utiliser de vrais algorithmes de chiffrement (AES-256, RSA) pour protéger les données sensibles. Former l'équipe à la différence entre encodage et chiffrement. Implémenter un système de gestion des secrets sécurisé (HashiCorp Vault, AWS Secrets Manager).
                 </div>
             </div>
 
             <!-- DÉFI 3 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 3</span>
+                <span class="defi-number">DÉFI 3</span>
                 <h3>Paramètres URL (GET)</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> Un utilisateur vous contacte car il a remarqué que lorsqu'il se connecte au site de l'entreprise, son identifiant et d'autres informations apparaissent directement dans la barre d'adresse du navigateur. Il s'inquiète que ces informations puissent être interceptées. Vous devez analyser cette pratique et évaluer les risques associés.
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Données sensibles transmises via les paramètres GET dans l'URL<br>
-                    <strong>Localisation :</strong> Barre d'adresse du navigateur (?param=valeur)
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> Observation de l'URL, inspecteur réseau<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Observer la barre d'adresse après une action</li>
-                        <li>Identifier les paramètres GET (?key=value)</li>
-                        <li>Analyser les informations exposées</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Transmission de données sensibles via paramètres GET
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> Les URLs sont enregistrées dans l'historique du navigateur, les logs serveur, et peuvent être interceptées. Transmettre des mots de passe ou tokens via GET est une faille critique.
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    Les URLs sont enregistrées dans l'historique du navigateur, les logs des serveurs proxy, et peuvent être partagées involontairement (copier-coller, captures d'écran). Transmettre des credentials ou tokens via GET expose ces données à de nombreux vecteurs d'attaque.
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Utiliser POST pour les données sensibles. Implémenter HTTPS obligatoire. Utiliser des tokens de session sécurisés avec HttpOnly et Secure flags. Ne jamais passer de credentials en URL.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Utiliser exclusivement POST pour les données sensibles. Implémenter HTTPS obligatoire sur tout le site. Utiliser des tokens de session sécurisés avec les attributs HttpOnly, Secure et SameSite. Mettre en place une politique stricte de ne jamais passer de credentials en URL.
                 </div>
             </div>
 
             <!-- DÉFI 4 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 4</span>
+                <span class="defi-number">DÉFI 4</span>
                 <h3>Cookies Non Sécurisés</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> Lors d'un pentest interne, vous découvrez que l'application stocke des informations de session dans des cookies. En analysant ces cookies via les DevTools, vous constatez qu'ils ne possèdent aucun attribut de sécurité. Vous devez évaluer l'impact de cette configuration et proposer des améliorations.
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Cookies stockant des données sensibles en clair, sans attributs de sécurité<br>
-                    <strong>Localisation :</strong> DevTools > Application/Storage > Cookies
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> Inspecteur (DevTools) > onglet Application<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Ouvrir DevTools (F12)</li>
-                        <li>Aller dans Application > Cookies</li>
-                        <li>Examiner les cookies, leurs valeurs et attributs</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Cookies sans attributs de sécurité
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> Les cookies sans attributs Secure, HttpOnly et SameSite sont vulnérables aux attaques XSS (vol de session) et CSRF. Les données peuvent être interceptées ou manipulées.
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    Les cookies sans attributs Secure, HttpOnly et SameSite sont vulnérables aux attaques XSS (vol de session via JavaScript malveillant), CSRF (falsification de requêtes), et aux interceptions Man-in-the-Middle. Un attaquant peut voler l'identité d'un utilisateur ou effectuer des actions en son nom.
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Toujours utiliser les flags Secure (HTTPS uniquement), HttpOnly (pas accessible en JavaScript), et SameSite (protection CSRF). Chiffrer les données sensibles dans les cookies.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Configurer systématiquement les cookies avec : Secure (transmission HTTPS uniquement), HttpOnly (inaccessible en JavaScript pour bloquer XSS), SameSite=Strict ou Lax (protection CSRF). Chiffrer les données sensibles avant de les stocker dans les cookies. Implémenter une politique de rotation des tokens de session.
                 </div>
             </div>
 
             <!-- DÉFI 5 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 5</span>
+                <span class="defi-number">DÉFI 5</span>
                 <h3>Console JavaScript</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> Un chercheur en sécurité signale que votre application web affiche des informations sensibles dans la console JavaScript du navigateur, accessible à tous les utilisateurs. L'équipe de développement affirme que ce sont juste des messages de debug "temporaires". Vous devez démontrer le risque réel de cette pratique en production.
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Logs de debug contenant des informations sensibles laissés en production<br>
-                    <strong>Localisation :</strong> Console JavaScript (F12 > Console)
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> Console JavaScript du navigateur<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Ouvrir la Console (F12 > onglet Console)</li>
-                        <li>Observer les messages console.log()</li>
-                        <li>Identifier les données sensibles exposées</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Logs de debug en production
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> Les console.log() en production peuvent exposer des données utilisateur, tokens d'authentification, requêtes API complètes, structure de la base de données, etc. Tout est visible par les utilisateurs.
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    Les console.log() en production peuvent exposer : données utilisateurs (emails, noms), tokens d'authentification, clés API, structure de la base de données, détails des requêtes API, logique métier sensible. Tout est visible par n'importe quel utilisateur ouvrant la console (F12).
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Supprimer tous les console.log() avant déploiement. Utiliser des outils de logging côté serveur avec contrôle d'accès. Activer le mode production qui désactive automatiquement les logs.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Supprimer tous les console.log() avant le déploiement en production via des outils de build (webpack, uglify). Utiliser des environnements séparés (dev/staging/prod) avec logging conditionnel. Implémenter un système de logging côté serveur avec contrôle d'accès strict. Activer le mode production qui désactive automatiquement les logs de debug.
                 </div>
             </div>
 
             <!-- DÉFI 6 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 6</span>
+                <span class="defi-number">DÉFI 6</span>
                 <h3>Chiffrement Faible (ROT13)</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> Vous auditez une ancienne application qui utilise un système de "chiffrement" pour protéger certaines données. En analysant le code, vous découvrez que l'algorithme utilisé date de l'époque romaine et se contente de décaler les lettres dans l'alphabet. Vous devez prouver que ce n'est pas une protection acceptable en 2025.
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Utilisation d'algorithmes de chiffrement obsolètes ou faibles (ROT13, Caesar)<br>
-                    <strong>Localisation :</strong> Messages chiffrés avec des méthodes anciennes
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> CyberChef (recette ROT13), décodeurs en ligne<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Identifier un chiffrement par substitution (lettres remplacées)</li>
-                        <li>Tester ROT13 dans CyberChef</li>
-                        <li>Décoder le message en clair</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Algorithme de chiffrement obsolète et faible
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> ROT13 et autres chiffrements par substitution simple sont cassables instantanément. Aucune protection réelle des données. Un attaquant peut lire toutes les informations "protégées".
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    ROT13 et autres chiffrements par substitution simple (César, Atbash) sont cassables instantanément par analyse de fréquence ou force brute. Ils n'offrent aucune protection réelle des données. Un attaquant amateur peut déchiffrer ces messages en quelques secondes avec des outils gratuits en ligne.
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Utiliser des algorithmes modernes et éprouvés : AES-256 pour le chiffrement symétrique, RSA-2048+ pour l'asymétrique. Suivre les recommandations NIST/ANSSI.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Utiliser exclusivement des algorithmes modernes et certifiés : AES-256 (Rijndael) pour le chiffrement symétrique, RSA-2048+ ou ECC pour l'asymétrique, SHA-256+ pour le hachage. Suivre les recommandations des standards internationaux (NIST, ANSSI). Ne jamais implémenter son propre algorithme de chiffrement.
                 </div>
             </div>
 
             <!-- DÉFI 7 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 7</span>
+                <span class="defi-number">DÉFI 7</span>
                 <h3>Éléments HTML Cachés</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> L'équipe frontend a développé un panneau d'administration "caché" en utilisant simplement du CSS (display: none). Ils affirment que seuls les administrateurs peuvent y accéder car "les utilisateurs normaux ne peuvent pas le voir". Vous devez démontrer pourquoi cette approche est dangereuse et qu'un simple inspecteur suffit à contourner cette "protection".
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Données sensibles "cachées" uniquement avec CSS (display: none, visibility: hidden)<br>
-                    <strong>Localisation :</strong> Code HTML avec styles CSS de masquage
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> Inspecteur de navigateur<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Inspecter le code HTML de la page (F12)</li>
-                        <li>Chercher des éléments avec display:none ou hidden</li>
-                        <li>Lire le contenu des éléments masqués</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Sécurité par obscurité (security by obscurity)
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> Cacher des éléments avec CSS ne les supprime pas du DOM ! Ils restent accessibles via l'inspecteur. Ne jamais "cacher" des secrets, données utilisateurs, ou fonctionnalités admin ainsi.
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    Cacher des éléments avec CSS (display:none, visibility:hidden, opacity:0) ne les supprime pas du DOM ! Ils restent accessibles via l'inspecteur et le code source. Ne jamais "cacher" des fonctionnalités admin, des secrets, des données utilisateurs, ou des informations confidentielles de cette manière.
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Ne jamais envoyer de données sensibles au client si elles ne doivent pas être vues. Gérer les permissions et l'accès côté serveur uniquement. Principe du moindre privilège.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Principe fondamental : ne jamais envoyer de données sensibles au client si elles ne doivent pas être accessibles. Gérer toutes les permissions et contrôles d'accès côté serveur. Appliquer le principe du moindre privilège : un utilisateur ne reçoit QUE les données qu'il est autorisé à voir. Implémenter une vérification d'autorisation sur chaque endpoint API.
                 </div>
             </div>
 
             <!-- DÉFI 8 -->
             <div class="defi-card">
-                <span class="defi-number">Défi 8</span>
+                <span class="defi-number">DÉFI 8</span>
                 <h3>Code JavaScript Exposé</h3>
-               
+                
+                <p style="margin: 20px 0; font-size: 1.05em; color: #475569;">
+                    <strong>📖 Situation :</strong> Vous découvrez qu'une application web stocke sa clé API Google Maps directement dans le code JavaScript pour "simplifier" le développement. L'équipe argue que "c'est une API publique de toute façon" et que "minifier le code suffit à protéger la clé". Vous devez expliquer pourquoi cette pratique est problématique et peut coûter très cher à l'entreprise.
+                </p>
+
                 <div class="red-flag">
                     <span class="badge badge-danger">🚩 RED FLAG</span>
-                    <strong>Faille identifiée :</strong> Secrets ou clés API stockés directement dans le code JavaScript client<br>
-                    <strong>Localisation :</strong> Fichiers .js ou balises &lt;script&gt; dans le code source
-                </div>
-
-                <div class="methode">
-                    <span class="badge badge-info">🔍 MÉTHODE</span>
-                    <strong>Outils utilisés :</strong> Afficher le code source (Ctrl+U), inspecteur > Sources<br>
-                    <strong>Démarche :</strong>
-                    <ul>
-                        <li>Afficher le code source de la page</li>
-                        <li>Examiner les fichiers JavaScript</li>
-                        <li>Rechercher des variables contenant des secrets</li>
-                    </ul>
+                    <strong>Type de faille :</strong> Exposition de secrets dans le code client
                 </div>
 
                 <div class="risque">
-                    <span class="badge badge-warning">⚠️ RISQUE</span>
-                    <strong>En contexte professionnel :</strong> Tout le code JavaScript est téléchargé et lisible côté client, même minifié. Stocker des clés API, tokens, ou secrets dans le JS expose ces informations à tous les utilisateurs et bots.
+                    <span class="badge badge-warning">⚠️ RISQUE PROFESSIONNEL</span>
+                    Tout le code JavaScript est téléchargé et exécuté côté client - n'importe qui peut le lire, même minifié ou obfusqué. Stocker des clés API, tokens, secrets de chiffrement ou credentials dans le JS expose ces informations à tous les utilisateurs et bots malveillants. Risques : surfacturation par utilisation frauduleuse d'API, accès non autorisé à des services payants, compromission de systèmes backend.
                 </div>
 
                 <div class="solution">
-                    <span class="badge badge-success">✅ SOLUTION</span>
-                    <strong>Mesure Blue Team :</strong> Gérer les secrets côté serveur uniquement. Utiliser des variables d'environnement. Pour les API publiques, utiliser des restrictions par domaine/IP, rate limiting, et des API keys avec scopes limités.
+                    <span class="badge badge-success">✅ MESURE PRÉVENTIVE</span>
+                    Gérer TOUS les secrets exclusivement côté serveur. Utiliser des variables d'environnement pour stocker les clés API. Pour les APIs publiques nécessaires côté client : implémenter un proxy backend, utiliser des restrictions par domaine/IP/referrer, activer le rate limiting strict, utiliser des API keys avec scopes minimaux et rotation régulière. Ne jamais faire confiance au client pour protéger des secrets.
                 </div>
             </div>
         </section>
@@ -891,7 +1100,7 @@
         <!-- CTF INTERACTIF -->
         <section id="ctf" class="section">
             <h2>🎮 CTF Interactif</h2>
-            <p style="margin-bottom: 30px;">Teste tes compétences ! Résous chaque défi pour débloquer le suivant. 🚀</p>
+            <p style="margin-bottom: 35px; font-size: 1.1em; color: #64748b;">Teste tes compétences ! Résous chaque défi pour débloquer le suivant. 🚀</p>
 
             <div class="progress-bar">
                 <div class="progress-text">Progression : <span id="progress-count">0</span> / 8 défis complétés</div>
@@ -920,8 +1129,8 @@
             <div id="congratulations-section" class="hidden">
                 <div class="congratulations">
                     <h2>🎉 Félicitations ! 🎉</h2>
-                    <p style="font-size: 1.3em; margin-bottom: 20px;">Tu as complété les 8 défis avec succès !</p>
-                    <p>Tu es maintenant un expert en détection de Red Flags en cybersécurité ! 🛡️</p>
+                    <p style="font-size: 1.4em; margin-bottom: 20px;">Tu as complété les 8 défis avec succès !</p>
+                    <p style="font-size: 1.1em;">Tu es maintenant un expert en détection de Red Flags en cybersécurité ! 🛡️</p>
                 </div>
             </div>
         </section>
@@ -942,7 +1151,7 @@
                 <p><strong>Rôle :</strong> Outil de décodage/encodage et manipulation de données.</p>
                 <p><strong>Fonctionnement :</strong> Interface web permettant d'appliquer différentes "recettes" (Base64, ROT13, hachage, etc.).</p>
                 <p><strong>Utilisation :</strong> Décoder des messages cachés, analyser des hash, convertir des formats.</p>
-                <p><strong>Lien :</strong> <a href="https://www.challenges-kids.fr/cyberchef/" target="_blank" style="color: #1e40af;">CyberChef Challenges Kids</a></p>
+                <p><strong>Lien :</strong> <a href="https://www.challenges-kids.fr/cyberchef/" target="_blank" style="color: #3b82f6; font-weight: 600;">CyberChef Challenges Kids</a></p>
             </div>
 
             <div class="tool-card">
@@ -966,9 +1175,9 @@
                 <p><strong>Utilisation :</strong> Identifier des tokens non sécurisés, des sessions vulnérables.</p>
             </div>
 
-            <h3 style="margin-top: 30px;">📚 Ressources supplémentaires</h3>
+            <h3 style="margin-top: 40px;">📚 Ressources supplémentaires</h3>
             <ul>
-                <li><a href="https://www.challenges-kids.fr/categories/aide/" target="_blank" style="color: #1e40af;">Page d'aide Challenges Kids</a></li>
+                <li><a href="https://www.challenges-kids.fr/categories/aide/" target="_blank" style="color: #3b82f6; font-weight: 600;">Page d'aide Challenges Kids</a></li>
                 <li>OWASP Top 10 - Les vulnérabilités web les plus critiques</li>
                 <li>Documentation sur les en-têtes HTTP sécurisés</li>
             </ul>
@@ -977,24 +1186,24 @@
         <!-- CONCLUSION -->
         <section id="conclusion" class="section">
             <h2>🎓 Conclusion</h2>
-            <p>À travers ces 8 défis, nous avons appris à :</p>
-            <ul>
+            <p style="font-size: 1.1em; margin-bottom: 20px;">À travers ces 8 défis, nous avons appris à :</p>
+            <ul style="font-size: 1.05em;">
                 <li>✅ Identifier méthodiquement des Red Flags sur des sites web</li>
                 <li>✅ Utiliser des outils professionnels de cybersécurité</li>
                 <li>✅ Comprendre les risques réels en contexte professionnel</li>
                 <li>✅ Proposer des solutions techniques concrètes (Blue Team)</li>
             </ul>
-            <p style="margin-top: 20px;"><strong>Leçon principale :</strong> La cybersécurité n'est pas seulement technique - c'est aussi une question de méthodologie, de vigilance et de compréhension des risques humains.</p>
+            <p style="margin-top: 30px; font-size: 1.1em;"><strong>Leçon principale :</strong> La cybersécurité n'est pas seulement technique - c'est aussi une question de méthodologie, de vigilance et de compréhension des risques humains.</p>
         </section>
 
         <!-- ADMIN -->
         <section id="admin" class="section">
             <div class="admin-login" id="admin-login">
                 <h3>🔒 Accès Staff</h3>
-                <p style="margin-bottom: 20px; color: #666;">Entrez le mot de passe administrateur</p>
-                <input type="password"
-                       class="admin-input"
-                       id="admin-password"
+                <p style="margin-bottom: 25px; color: #64748b; font-size: 1.05em;">Entrez le mot de passe administrateur</p>
+                <input type="password" 
+                       class="admin-input" 
+                       id="admin-password" 
                        placeholder="Mot de passe"
                        onkeypress="if(event.key === 'Enter') unlockAdmin()">
                 <button class="submit-btn" onclick="unlockAdmin()">Déverrouiller</button>
@@ -1003,7 +1212,7 @@
 
             <div class="admin-content" id="admin-content">
                 <h2>🔓 Panel Admin - Tous les Flags</h2>
-                <p style="margin-bottom: 20px;">Liste complète des flags pour validation :</p>
+                <p style="margin-bottom: 25px; font-size: 1.05em; color: #64748b;">Liste complète des flags pour validation :</p>
 
                 <table class="flag-table">
                     <thead>
@@ -1066,15 +1275,15 @@
                     </tbody>
                 </table>
 
-                <div style="margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 10px; border-left: 4px solid #fbbf24;">
+                <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 15px; border-left: 5px solid #f59e0b;">
                     <strong>⚠️ Attention :</strong> Ces informations sont réservées au staff uniquement. Ne pas partager les flags avec les participants !
                 </div>
             </div>
         </section>
 
         <footer>
-            <p>🛡️ Projet réalisé dans le cadre de la Séquence 2 - Cybersécurité sur le web</p>
-            <p style="margin-top: 10px; color: #666;">Challenges Kids - Partie 1 : Web (Défis 1 à 8)</p>
+            <p style="font-weight: 600; font-size: 1.05em;">🛡️ Projet Cybersécurité - Séquence 2</p>
+            <p style="margin-top: 10px; font-size: 0.95em;">Challenges Kids • Partie 1 : Web (Défis 1 à 8)</p>
         </footer>
     </div>
 
@@ -1087,7 +1296,7 @@
                 content: `
                     <p>Bienvenue dans ton premier défi ! 👋</p>
                     <p>Un développeur a laissé un commentaire dans le code source de cette page. Trouve-le !</p>
-                   
+                    
                     <div class="hint-box">
                         <strong>💡 Indice :</strong> Utilise l'inspecteur de ton navigateur (F12 ou clic droit > "Inspecter") pour voir le code source HTML de cette page. Cherche les commentaires HTML (ils commencent par &lt;!-- et finissent par --&gt;)
                     </div>
@@ -1095,10 +1304,10 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Commentaires sensibles dans le code source HTML</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>Les développeurs laissent parfois des informations sensibles (mots de passe, clés API, TODOs) dans les commentaires HTML. Ces informations sont visibles par tout le monde !</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Supprimer tous les commentaires sensibles avant la mise en production. Utiliser des variables d'environnement pour les secrets.</p>
                     </div>
@@ -1112,10 +1321,10 @@
                 description: "Un message est caché en Base64. Décode-le pour trouver le flag !",
                 content: `
                     <p>Le développeur a essayé de cacher un flag en utilisant l'encodage Base64. 🔐</p>
-                   
+                    
                     <div class="challenge-info">
                         <h4>🔍 Message encodé :</h4>
-                        <code style="display: block; padding: 15px; margin: 10px 0;">RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ==</code>
+                        <code style="display: block; padding: 15px; margin: 10px 0; font-size: 1.1em;">RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ==</code>
                     </div>
 
                     <div class="hint-box">
@@ -1125,10 +1334,10 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Utilisation de Base64 pour "protéger" des données sensibles</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>Base64 n'est pas une méthode de sécurité ! C'est juste un encodage facilement réversible. Les données "protégées" avec Base64 sont accessibles à tous.</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Utiliser un vrai chiffrement (AES, RSA) pour protéger les données sensibles. Ne jamais confondre encodage et chiffrement.</p>
                     </div>
@@ -1142,8 +1351,8 @@
                     <p>Regarde bien l'URL actuelle de cette page dans ton navigateur ! 🔗</p>
                     <p>Un paramètre spécial a été ajouté... Si tu ne le vois pas, clique sur ce lien :</p>
                     <p style="margin: 20px 0;">
-                        <a href="?secret=FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}"
-                           style="color: #1e40af; font-weight: bold; text-decoration: underline;">
+                        <a href="?secret=FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}" 
+                           style="color: #3b82f6; font-weight: 600; text-decoration: underline; font-size: 1.05em;">
                            Clique ici pour révéler le paramètre caché
                         </a>
                     </p>
@@ -1155,10 +1364,10 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Données sensibles transmises via les paramètres GET dans l'URL</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>Les URLs sont enregistrées dans l'historique du navigateur, les logs serveur, et peuvent être interceptées. Ne jamais transmettre de mots de passe ou tokens via l'URL !</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Utiliser les méthodes POST pour les données sensibles, HTTPS obligatoire, et des tokens de session sécurisés avec HttpOnly et Secure flags.</p>
                     </div>
@@ -1178,10 +1387,10 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Cookies stockant des données sensibles en clair, sans attributs de sécurité</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>Les cookies sans attributs Secure, HttpOnly et SameSite sont vulnérables aux attaques XSS et CSRF. Les données peuvent être volées ou manipulées.</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Toujours utiliser les flags Secure (HTTPS uniquement), HttpOnly (pas accessible en JS), et SameSite (protection CSRF). Chiffrer les données sensibles.</p>
                     </div>
@@ -1201,10 +1410,10 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Logs de debug contenant des informations sensibles laissés en production</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>Les console.log() en production peuvent exposer des données utilisateur, tokens d'authentification, requêtes API, etc. Visible par tout le monde !</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Supprimer tous les console.log() avant le déploiement. Utiliser des outils de logging côté serveur avec contrôle d'accès. Activer le mode production qui désactive les logs.</p>
                     </div>
@@ -1219,7 +1428,7 @@
 
                     <div class="challenge-info">
                         <h4>🔍 Message chiffré :</h4>
-                        <code style="display: block; padding: 15px; margin: 10px 0;">SYNT{e0g13_vf_gbb_jrnx}</code>
+                        <code style="display: block; padding: 15px; margin: 10px 0; font-size: 1.1em;">SYNT{e0g13_vf_gbb_jrnx}</code>
                     </div>
 
                     <div class="hint-box">
@@ -1229,10 +1438,10 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Utilisation d'algorithmes de chiffrement obsolètes ou faibles (ROT13, Caesar cipher)</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>ROT13 et autres chiffrements par substitution simple sont cassables en quelques secondes. Aucune protection réelle des données.</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Utiliser des algorithmes modernes et éprouvés : AES-256 pour le chiffrement symétrique, RSA pour l'asymétrique. Suivre les standards NIST.</p>
                     </div>
@@ -1256,10 +1465,10 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Données sensibles "cachées" uniquement avec CSS (display: none, visibility: hidden)</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>Cacher des éléments avec CSS ne les supprime pas du DOM ! Ils restent accessibles via l'inspecteur et le code source. Ne jamais "cacher" des secrets ainsi.</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Ne jamais envoyer de données sensibles au client si elles ne doivent pas être vues. Gérer les permissions côté serveur, pas côté client.</p>
                     </div>
@@ -1279,15 +1488,15 @@
                     <div class="challenge-info">
                         <h4>📚 Red Flag identifié :</h4>
                         <p>Secrets ou clés API stockés directement dans le code JavaScript client</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">⚠️ Risque :</h4>
                         <p>Tout le code JavaScript est téléchargé et exécuté côté client. N'importe qui peut le lire, même minifié. Ne JAMAIS y mettre de clés API, tokens, ou secrets.</p>
-                       
+                        
                         <h4 style="margin-top: 15px;">✅ Solution Blue Team :</h4>
                         <p>Gérer les secrets côté serveur uniquement. Utiliser des variables d'environnement. Pour les API publiques, utiliser des restrictions par domaine/IP et des rate limiting.</p>
                     </div>
 
-                    <p style="margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 10px; border-left: 4px solid #fbbf24;">
+                    <p style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 15px; border-left: 5px solid #f59e0b;">
                         <strong>🎊 Dernier défi !</strong> Une fois validé, tu auras complété tous les défis du CTF ! Bravo pour ta persévérance ! 🚩
                     </p>
                 `,
@@ -1308,21 +1517,21 @@
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
-           
+            
             // Afficher la section demandée
             document.getElementById(sectionId).classList.add('active');
-           
+            
             // Mettre à jour le menu
             document.querySelectorAll('nav a').forEach(link => {
                 link.classList.remove('active');
             });
             event.target.classList.add('active');
-           
+            
             // Si on va sur CTF, initialiser si nécessaire
             if (sectionId === 'ctf' && !document.getElementById('challenge-container').innerHTML) {
                 loadChallenge(1);
             }
-           
+            
             // Scroll vers le haut
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1331,10 +1540,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Créer un cookie pour le défi 4
             document.cookie = "secret_flag=FLAG{c00k13s_4r3_n0t_s4f3}; path=/";
-           
+            
             // Logger dans la console pour le défi 5
             console.log("🚩 Défi 5 - Flag pour toi :", "FLAG{c0ns0l3_l0gs_l34k_d4t4}");
-           
+            
             // Gérer les clics sur les boutons de défi
             document.addEventListener('click', (e) => {
                 if (e.target.classList.contains('challenge-btn')) {
@@ -1349,7 +1558,7 @@
         function loadChallenge(num) {
             currentChallenge = num;
             const challenge = challenges[num];
-           
+            
             // Mettre à jour les boutons
             document.querySelectorAll('.challenge-btn').forEach(btn => {
                 btn.classList.remove('active-challenge');
@@ -1357,7 +1566,7 @@
                     btn.classList.add('active-challenge');
                 }
             });
-           
+            
             // Afficher le contenu du défi
             const container = document.getElementById('challenge-container');
             container.innerHTML = `
@@ -1372,8 +1581,8 @@
                     <div class="flag-input-section">
                         <div class="flag-input-title">🚩 Valider le flag :</div>
                         <div class="flag-input-container">
-                            <input type="text"
-                                   class="flag-input"
+                            <input type="text" 
+                                   class="flag-input" 
                                    id="flag-input-${num}"
                                    placeholder="FLAG{...}"
                                    autocomplete="off">
@@ -1383,12 +1592,12 @@
                     </div>
                 </div>
             `;
-           
+            
             // Focus sur l'input
             setTimeout(() => {
                 document.getElementById(`flag-input-${num}`).focus();
             }, 100);
-           
+            
             // Permettre la validation avec Entrée
             document.getElementById(`flag-input-${num}`).addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
@@ -1402,26 +1611,26 @@
             const message = document.getElementById(`message-${challengeNum}`);
             const userFlag = input.value.trim();
             const correctFlag = challenges[challengeNum].flag;
-           
+            
             if (userFlag === correctFlag) {
                 // Flag correct !
                 message.className = 'message success';
                 message.textContent = '✅ Bravo ! Flag correct ! Le défi suivant est maintenant débloqué ! 🎉';
-               
+                
                 // Marquer comme complété
                 completedChallenges.add(challengeNum);
-               
+                
                 // Mettre à jour le bouton
                 const btn = document.querySelector(`[data-challenge="${challengeNum}"]`);
                 btn.classList.remove('unlocked');
                 btn.classList.add('completed');
-               
+                
                 // Débloquer le défi suivant
                 if (challengeNum < 8) {
                     const nextBtn = document.querySelector(`[data-challenge="${challengeNum + 1}"]`);
                     nextBtn.classList.remove('locked');
                     nextBtn.classList.add('unlocked');
-                   
+                    
                     // Charger automatiquement le défi suivant après 2 secondes
                     setTimeout(() => {
                         loadChallenge(challengeNum + 1);
@@ -1432,15 +1641,15 @@
                         showCongratulations();
                     }, 2000);
                 }
-               
+                
                 // Mettre à jour la barre de progression
                 updateProgress();
-               
+                
             } else {
                 // Flag incorrect
                 message.className = 'message error';
                 message.textContent = '❌ Flag incorrect ! Essaie encore... Relis bien les indices ! 💪';
-               
+                
                 // Secouer l'input
                 input.style.animation = 'shake 0.5s';
                 setTimeout(() => {
@@ -1453,7 +1662,7 @@
             const completed = completedChallenges.size;
             const total = 8;
             const percentage = (completed / total) * 100;
-           
+            
             document.getElementById('progress-count').textContent = completed;
             document.getElementById('progress-fill').style.width = percentage + '%';
             document.getElementById('progress-fill').textContent = Math.round(percentage) + '%';
@@ -1462,7 +1671,7 @@
         function showCongratulations() {
             document.getElementById('challenge-container').classList.add('hidden');
             document.getElementById('congratulations-section').classList.remove('hidden');
-           
+            
             // Scroll vers le message de félicitations
             document.getElementById('congratulations-section').scrollIntoView({ behavior: 'smooth' });
         }
@@ -1471,14 +1680,14 @@
         function unlockAdmin() {
             const password = document.getElementById('admin-password').value;
             const message = document.getElementById('admin-message');
-           
+            
             if (password === 'KMN2008') {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-content').classList.add('unlocked');
             } else {
                 message.className = 'message error';
                 message.textContent = '❌ Mot de passe incorrect !';
-               
+                
                 // Secouer l'input
                 const input = document.getElementById('admin-password');
                 input.style.animation = 'shake 0.5s';
