@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Défi 2 - Décodage Base64</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #f5576c; margin-bottom: 10px; font-size: 2em; }
+        .challenge-badge {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+        .scenario {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #f5576c;
+        }
+        .scenario h3 { color: #f5576c; margin-bottom: 15px; }
+        p { line-height: 1.8; color: #475569; margin-bottom: 15px; }
+        .encoded-message {
+            background: #1e293b;
+            color: #22d3ee;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 25px 0;
+            word-break: break-all;
+            text-align: center;
+        }
+        .hint {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .hint strong { color: #b45309; }
+        .flag-input-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid #f5576c;
+        }
+        .flag-input-title { color: #f5576c; font-weight: 700; margin-bottom: 20px; font-size: 1.2em; }
+        .flag-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .flag-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #f5576c;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+        }
+        .flag-input:focus {
+            outline: none;
+            border-color: #f093fb;
+            box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.2);
+        }
+        .submit-btn {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4); }
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+        }
+        .message.success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+            display: block;
+        }
+        .message.error {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+            display: block;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            background: #64748b;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { background: #475569; transform: translateY(-2px); }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="challenge-badge">DÉFI 2 - FACILE</span>
+        <h1>🔐 Décodage Base64</h1>
+
+        <div class="scenario">
+            <h3>📖 Contexte</h3>
+            <p>En analysant le trafic réseau d'une application web lors d'un audit, tu découvres qu'une API retourne des données "protégées" avec Base64. Le développeur te dit fièrement : "Ne t'inquiète pas, les données sont encodées, personne ne peut les lire !"</p>
+            <p>Il est temps de lui prouver que Base64 n'est PAS une méthode de sécurité...</p>
+        </div>
+
+        <p><strong>🎯 Ta mission :</strong> Décode le message ci-dessous pour récupérer le flag. Base64 n'est qu'un encodage, pas un chiffrement !</p>
+
+        <div class="encoded-message">
+            RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ==
+        </div>
+
+        <div class="hint">
+            <strong>💡 Indice :</strong> Tu peux utiliser <a href="https://www.challenges-kids.fr/cyberchef/" target="_blank" style="color: #f5576c; font-weight: 600;">CyberChef</a> avec la recette "From Base64", ou simplement chercher "base64 decode" sur Google. N'importe quel outil de décodage Base64 fonctionnera !
+        </div>
+
+        <div class="flag-input-section">
+            <div class="flag-input-title">🚩 Valider le flag</div>
+            <div class="flag-input-container">
+                <input type="text" class="flag-input" id="flag-input" placeholder="FLAG{...}" autocomplete="off">
+                <button class="submit-btn" onclick="validateFlag()">Valider</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+
+        <a href="index.html" class="back-btn">← Retour aux défis</a>
+    </div>
+
+    <script>
+        const correctFlag = "FLAG{b4s364_1s_n0t_s3cur1ty}";
+        function validateFlag() {
+            const input = document.getElementById('flag-input');
+            const message = document.getElementById('message');
+            const userFlag = input.value.trim();
+            if (userFlag === correctFlag) {
+                message.className = 'message success';
+                message.textContent = '✅ Excellent ! Tu as compris que Base64 ≠ sécurité ! Défi 2 complété ! 🎉';
+                saveProgress(2);
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            } else {
+                message.className = 'message error';
+                message.textContent = '❌ Pas tout à fait... Essaie de décoder le message Base64 !';
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => { input.style.animation = ''; }, 500);
+            }
+        }
+        function saveProgress(challengeId) {
+            const saved = localStorage.getItem('ctf_progress');
+            const progress = saved ? JSON.parse(saved) : [];
+            if (!progress.includes(challengeId)) {
+                progress.push(challengeId);
+                localStorage.setItem('ctf_progress', JSON.stringify(progress));
+            }
+        }
+        document.getElementById('flag-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateFlag();
+        });
+        document.getElementById('flag-input').focus();
+    </script>
+</body>
+</html>
