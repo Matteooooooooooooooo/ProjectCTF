@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Défi 3 - Paramètres URL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container { max-width: 700px; background: white; padding: 50px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #00f2fe; margin-bottom: 10px; font-size: 2em; }
+        .challenge-badge { background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 25px; font-weight: 700; font-size: 0.9em; }
+        .scenario { background: #f8fafc; padding: 25px; border-radius: 15px; margin: 25px 0; border-left: 5px solid #00f2fe; }
+        .scenario h3 { color: #00f2fe; margin-bottom: 15px; }
+        p { line-height: 1.8; color: #475569; margin-bottom: 15px; }
+        .hint { background: #fef3c7; padding: 20px; border-radius: 10px; margin: 25px 0; border-left: 4px solid #f59e0b; }
+        .hint strong { color: #b45309; }
+        a.link-button { display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; text-decoration: none; border-radius: 10px; font-weight: 600; margin: 20px 0; transition: all 0.3s; }
+        a.link-button:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4); }
+        .flag-input-section { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 30px; border-radius: 15px; margin-top: 30px; border: 2px solid #00f2fe; }
+        .flag-input-title { color: #00f2fe; font-weight: 700; margin-bottom: 20px; font-size: 1.2em; }
+        .flag-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .flag-input { flex: 1; padding: 14px 18px; border: 2px solid #00f2fe; border-radius: 10px; font-size: 1em; font-family: 'Courier New', monospace; }
+        .flag-input:focus { outline: none; border-color: #4facfe; box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2); }
+        .submit-btn { padding: 14px 30px; background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border: none; border-radius: 10px; font-size: 1em; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4); }
+        .message { padding: 15px; border-radius: 10px; margin-top: 15px; font-weight: 600; display: none; }
+        .message.success { background: #d1fae5; border: 2px solid #10b981; color: #065f46; display: block; }
+        .message.error { background: #fee2e2; border: 2px solid #ef4444; color: #991b1b; display: block; }
+        .back-btn { display: inline-block; margin-top: 25px; padding: 12px 25px; background: #64748b; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: all 0.3s; }
+        .back-btn:hover { background: #475569; transform: translateY(-2px); }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); } 20%, 40%, 60%, 80% { transform: translateX(8px); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="challenge-badge">DÉFI 3 - FACILE</span>
+        <h1>🌐 Paramètres URL</h1>
+        <div class="scenario">
+            <h3>📖 Contexte</h3>
+            <p>Un utilisateur te signale un comportement étrange : en se connectant au portail interne de l'entreprise, il remarque que son nom d'utilisateur et d'autres informations apparaissent directement dans la barre d'adresse du navigateur.</p>
+            <p>Il s'inquiète que quelqu'un puisse voir ces informations sensibles simplement en regardant par-dessus son épaule ou en consultant l'historique de navigation...</p>
+        </div>
+        <p><strong>🎯 Ta mission :</strong> Clique sur le lien ci-dessous pour charger une URL avec des paramètres, puis examine l'URL dans ta barre d'adresse pour trouver le flag.</p>
+        <a href="?secret=FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}" class="link-button">🔗 Charger l'URL avec le paramètre secret</a>
+        <div class="hint">
+            <strong>💡 Indice :</strong> Après avoir cliqué sur le lien, regarde attentivement la barre d'adresse de ton navigateur. Les paramètres GET apparaissent après le <code>?</code> au format <code>nom=valeur</code>. Le flag est juste là, visible par n'importe qui !
+        </div>
+        <div class="flag-input-section">
+            <div class="flag-input-title">🚩 Valider le flag</div>
+            <div class="flag-input-container">
+                <input type="text" class="flag-input" id="flag-input" placeholder="FLAG{...}" autocomplete="off">
+                <button class="submit-btn" onclick="validateFlag()">Valider</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+        <a href="index.html" class="back-btn">← Retour aux défis</a>
+    </div>
+    <script>
+        const correctFlag = "FLAG{url_p4r4m3t3rs_4r3_v1s1bl3}";
+        function validateFlag() {
+            const input = document.getElementById('flag-input');
+            const message = document.getElementById('message');
+            const userFlag = input.value.trim();
+            if (userFlag === correctFlag) {
+                message.className = 'message success';
+                message.textContent = '✅ Parfait ! Tu as compris pourquoi les données sensibles ne vont pas dans les URLs ! Défi 3 complété ! 🎉';
+                saveProgress(3);
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            } else {
+                message.className = 'message error';
+                message.textContent = '❌ Pas tout à fait... Regarde bien dans la barre d\'adresse de ton navigateur après avoir cliqué sur le lien !';
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => { input.style.animation = ''; }, 500);
+            }
+        }
+        function saveProgress(challengeId) {
+            const saved = localStorage.getItem('ctf_progress');
+            const progress = saved ? JSON.parse(saved) : [];
+            if (!progress.includes(challengeId)) {
+                progress.push(challengeId);
+                localStorage.setItem('ctf_progress', JSON.stringify(progress));
+            }
+        }
+        document.getElementById('flag-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateFlag();
+        });
+    </script>
+</body>
+</html>
