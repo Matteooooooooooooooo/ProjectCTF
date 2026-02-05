@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Défi 1 - Inspection du Code Source</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .challenge-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+
+        .scenario {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .scenario h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        p {
+            line-height: 1.8;
+            color: #475569;
+            margin-bottom: 15px;
+        }
+
+        .hint {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .hint strong {
+            color: #b45309;
+        }
+
+        .flag-input-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid #667eea;
+        }
+
+        .flag-input-title {
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .flag-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .flag-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+        }
+
+        .flag-input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .submit-btn {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+            display: block;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+            display: block;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            background: #64748b;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #475569;
+            transform: translateY(-2px);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="challenge-badge">DÉFI 1 - FACILE</span>
+        <h1>🔍 Inspection du Code Source</h1>
+
+        <div class="scenario">
+            <h3>📖 Contexte</h3>
+            <p>Tu viens d'intégrer l'équipe de sécurité d'une startup en forte croissance. Ton manager te confie ta première mission : auditer le site web de l'entreprise pour vérifier qu'aucune information sensible n'a été laissée par les développeurs dans le code source.</p>
+            <p>En parcourant rapidement le code HTML, tu remarques que certains développeurs ont l'habitude de laisser des commentaires... parfois un peu trop détaillés.</p>
+        </div>
+
+        <p><strong>🎯 Ta mission :</strong> Utilise les outils de développement pour inspecter le code source de cette page et trouve le flag caché dans un commentaire HTML.</p>
+
+        <div class="hint">
+            <strong>💡 Indice :</strong> Les commentaires HTML ne sont pas visibles sur la page, mais ils sont présents dans le code source. Utilise <code>F12</code> pour ouvrir l'inspecteur ou fais un clic droit > "Inspecter". Tu peux aussi afficher le code source brut avec <code>Ctrl+U</code>.
+        </div>
+
+        <!-- 
+            Commentaire de développement - À SUPPRIMER AVANT LA PROD !
+            
+            TODO: Changer le mot de passe admin
+            API_KEY: sk_test_4eC39HqLyjWDarjtT1zdp7dc
+            
+            Le flag pour ce défi est : FLAG{1nsp3ct_th3_s0urc3_c0d3}
+            
+            Note pour l'équipe : Ne pas oublier de supprimer ce commentaire !
+        -->
+
+        <div class="flag-input-section">
+            <div class="flag-input-title">🚩 Valider le flag</div>
+            <div class="flag-input-container">
+                <input type="text" 
+                       class="flag-input" 
+                       id="flag-input"
+                       placeholder="FLAG{...}"
+                       autocomplete="off">
+                <button class="submit-btn" onclick="validateFlag()">Valider</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+
+        <a href="index.html" class="back-btn">← Retour aux défis</a>
+    </div>
+
+    <script>
+        const correctFlag = "FLAG{1nsp3ct_th3_s0urc3_c0d3}";
+
+        function validateFlag() {
+            const input = document.getElementById('flag-input');
+            const message = document.getElementById('message');
+            const userFlag = input.value.trim();
+
+            if (userFlag === correctFlag) {
+                message.className = 'message success';
+                message.textContent = '✅ Bravo ! Flag correct ! Défi 1 complété ! 🎉';
+                
+                // Sauvegarder la progression
+                saveProgress(1);
+                
+                // Redirection après 2 secondes
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                message.className = 'message error';
+                message.textContent = '❌ Flag incorrect ! Relis bien les indices et inspecte le code source...';
+                
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function saveProgress(challengeId) {
+            const saved = localStorage.getItem('ctf_progress');
+            const progress = saved ? JSON.parse(saved) : [];
+            if (!progress.includes(challengeId)) {
+                progress.push(challengeId);
+                localStorage.setItem('ctf_progress', JSON.stringify(progress));
+            }
+        }
+
+        // Validation avec la touche Entrée
+        document.getElementById('flag-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                validateFlag();
+            }
+        });
+
+        // Auto-focus sur l'input
+        document.getElementById('flag-input').focus();
+    </script>
+</body>
+</html>
