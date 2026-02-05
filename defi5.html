@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Défi 5 - Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { max-width: 700px; background: white; padding: 50px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #30cfd0; margin-bottom: 10px; font-size: 2em; }
+        .challenge-badge { background: linear-gradient(135deg, #30cfd0, #330867); color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 25px; font-weight: 700; font-size: 0.9em; }
+        .scenario { background: #f8fafc; padding: 25px; border-radius: 15px; margin: 25px 0; border-left: 5px solid #30cfd0; }
+        .scenario h3 { color: #30cfd0; margin-bottom: 15px; }
+        p { line-height: 1.8; color: #475569; margin-bottom: 15px; }
+        .hint { background: #fef3c7; padding: 20px; border-radius: 10px; margin: 25px 0; border-left: 4px solid #f59e0b; }
+        .hint strong { color: #b45309; }
+        code { background: #1e293b; color: #22d3ee; padding: 3px 8px; border-radius: 5px; font-family: 'Courier New', monospace; }
+        .flag-input-section { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 30px; border-radius: 15px; margin-top: 30px; border: 2px solid #30cfd0; }
+        .flag-input-title { color: #30cfd0; font-weight: 700; margin-bottom: 20px; font-size: 1.2em; }
+        .flag-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .flag-input { flex: 1; padding: 14px 18px; border: 2px solid #30cfd0; border-radius: 10px; font-size: 1em; font-family: 'Courier New', monospace; }
+        .submit-btn { padding: 14px 30px; background: linear-gradient(135deg, #30cfd0, #330867); color: white; border: none; border-radius: 10px; font-size: 1em; font-weight: 700; cursor: pointer; }
+        .message { padding: 15px; border-radius: 10px; margin-top: 15px; font-weight: 600; display: none; }
+        .message.success { background: #d1fae5; border: 2px solid #10b981; color: #065f46; display: block; }
+        .message.error { background: #fee2e2; border: 2px solid #ef4444; color: #991b1b; display: block; }
+        .back-btn { display: inline-block; margin-top: 25px; padding: 12px 25px; background: #64748b; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="challenge-badge">DÉFI 5 - MOYEN</span>
+        <h1>🖥️ Console JavaScript</h1>
+        <div class="scenario">
+            <h3>📖 Contexte</h3>
+            <p>Un chercheur en sécurité signale que ton application affiche des informations sensibles dans la console JavaScript. L'équipe de dev répond : "Ce sont juste des logs de debug temporaires, personne ne regarde la console !"</p>
+            <p>Il est temps de montrer à quel point c'est dangereux...</p>
+        </div>
+        <p><strong>🎯 Ta mission :</strong> Ouvre la console JavaScript pour découvrir le flag qui y a été loggé.</p>
+        <div class="hint">
+            <strong>💡 Indice :</strong> Ouvre les DevTools avec <code>F12</code>, puis va dans l'onglet <strong>"Console"</strong>. Un message de debug contient le flag ! Les développeurs oublient souvent de supprimer ces logs en production...
+        </div>
+        <div class="flag-input-section">
+            <div class="flag-input-title">🚩 Valider le flag</div>
+            <div class="flag-input-container">
+                <input type="text" class="flag-input" id="flag-input" placeholder="FLAG{...}" autocomplete="off">
+                <button class="submit-btn" onclick="validateFlag()">Valider</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+        <a href="index.html" class="back-btn">← Retour aux défis</a>
+    </div>
+    <script>
+        // Log du flag dans la console
+        console.log("🚩 DEBUG MODE - Défi 5");
+        console.log("Flag pour validation:", "FLAG{c0ns0l3_l0gs_l34k_d4t4}");
+        console.log("TODO: Supprimer ces logs avant la production !");
+        
+        const correctFlag = "FLAG{c0ns0l3_l0gs_l34k_d4t4}";
+        function validateFlag() {
+            const input = document.getElementById('flag-input');
+            const message = document.getElementById('message');
+            const userFlag = input.value.trim();
+            if (userFlag === correctFlag) {
+                message.className = 'message success';
+                message.textContent = '✅ Excellent ! Tu as prouvé que les console.log() exposent des données ! Défi 5 complété ! 🎉';
+                saveProgress(5);
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            } else {
+                message.className = 'message error';
+                message.textContent = '❌ Essaie encore... Ouvre la console (F12 > Console) et lis les messages !';
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => { input.style.animation = ''; }, 500);
+            }
+        }
+        function saveProgress(challengeId) {
+            const saved = localStorage.getItem('ctf_progress');
+            const progress = saved ? JSON.parse(saved) : [];
+            if (!progress.includes(challengeId)) {
+                progress.push(challengeId);
+                localStorage.setItem('ctf_progress', JSON.stringify(progress));
+            }
+        }
+        document.getElementById('flag-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateFlag();
+        });
+    </script>
+</body>
+</html>
