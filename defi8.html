@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Défi 8 - Code JavaScript</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { max-width: 700px; background: white; padding: 50px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #fcb69f; margin-bottom: 10px; font-size: 2em; }
+        .challenge-badge { background: linear-gradient(135deg, #ffecd2, #fcb69f); color: #333; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 25px; font-weight: 700; font-size: 0.9em; }
+        .scenario { background: #f8fafc; padding: 25px; border-radius: 15px; margin: 25px 0; border-left: 5px solid #fcb69f; }
+        .scenario h3 { color: #fcb69f; margin-bottom: 15px; }
+        p { line-height: 1.8; color: #475569; margin-bottom: 15px; }
+        .hint { background: #fef3c7; padding: 20px; border-radius: 10px; margin: 25px 0; border-left: 4px solid #f59e0b; }
+        .hint strong { color: #b45309; }
+        code { background: #1e293b; color: #22d3ee; padding: 3px 8px; border-radius: 5px; font-family: 'Courier New', monospace; }
+        .final-note {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #10b981;
+        }
+        .final-note h3 { color: #059669; margin-bottom: 10px; }
+        .flag-input-section { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 30px; border-radius: 15px; margin-top: 30px; border: 2px solid #fcb69f; }
+        .flag-input-title { color: #fcb69f; font-weight: 700; margin-bottom: 20px; font-size: 1.2em; }
+        .flag-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .flag-input { flex: 1; padding: 14px 18px; border: 2px solid #fcb69f; border-radius: 10px; font-size: 1em; font-family: 'Courier New', monospace; }
+        .submit-btn { padding: 14px 30px; background: linear-gradient(135deg, #ffecd2, #fcb69f); color: #333; border: none; border-radius: 10px; font-size: 1em; font-weight: 700; cursor: pointer; }
+        .message { padding: 15px; border-radius: 10px; margin-top: 15px; font-weight: 600; display: none; }
+        .message.success { background: #d1fae5; border: 2px solid #10b981; color: #065f46; display: block; }
+        .message.error { background: #fee2e2; border: 2px solid #ef4444; color: #991b1b; display: block; }
+        .back-btn { display: inline-block; margin-top: 25px; padding: 12px 25px; background: #64748b; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="challenge-badge">DÉFI 8 - DIFFICILE</span>
+        <h1>📜 Code JavaScript Exposé</h1>
+        <div class="scenario">
+            <h3>📖 Contexte</h3>
+            <p>Lors de ton audit final, tu découvres qu'une application web stocke sa clé API Google Maps directement dans le code JavaScript pour "simplifier" le développement. L'équipe argue que "c'est une API publique de toute façon" et que "minifier le code suffit à protéger la clé".</p>
+            <p>C'est le moment de démontrer que RIEN n'est secret dans le code JavaScript côté client !</p>
+        </div>
+        <p><strong>🎯 Ta mission finale :</strong> Fouille dans le code source JavaScript de cette page pour trouver le flag stocké dans une variable.</p>
+        <div class="hint">
+            <strong>💡 Indice :</strong> Le flag est stocké dans une variable JavaScript nommée <code>finalSecretFlag</code>. Utilise <code>Ctrl+U</code> pour voir le code source, ou ouvre les DevTools (<code>F12</code>) > onglet "Sources" / "Debugger" pour explorer le code JavaScript de cette page.
+        </div>
+        <div class="final-note">
+            <h3>🎊 Dernier défi !</h3>
+            <p>Une fois ce défi validé, tu auras complété les 8 défis du CTF ! Tu auras démontré ta maîtrise des techniques de base pour identifier les Red Flags en cybersécurité web. Félicitations ! 🏆</p>
+        </div>
+        <div class="flag-input-section">
+            <div class="flag-input-title">🚩 Valider le flag final</div>
+            <div class="flag-input-container">
+                <input type="text" class="flag-input" id="flag-input" placeholder="FLAG{...}" autocomplete="off">
+                <button class="submit-btn" onclick="validateFlag()">Valider</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+        <a href="index.html" class="back-btn">← Retour aux défis</a>
+    </div>
+    <script>
+        // Variable contenant le flag (exposée dans le code source)
+        const finalSecretFlag = "FLAG{j4v4scr1pt_1s_publ1c}";
+        
+        // Fausse clé API pour rendre le scénario réaliste
+        const GOOGLE_MAPS_API_KEY = "AIzaSyDEMOKEY_dGhpcyBpcyBub3QgcmVhbA";
+        
+        const correctFlag = "FLAG{j4v4scr1pt_1s_publ1c}";
+        function validateFlag() {
+            const input = document.getElementById('flag-input');
+            const message = document.getElementById('message');
+            const userFlag = input.value.trim();
+            if (userFlag === correctFlag) {
+                message.className = 'message success';
+                message.textContent = '🎉 FÉLICITATIONS ! Tu as complété les 8 défis ! Tu es maintenant un expert en Red Flags ! 🏆';
+                saveProgress(8);
+                setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+            } else {
+                message.className = 'message error';
+                message.textContent = '❌ Presque ! Cherche la variable finalSecretFlag dans le code JavaScript !';
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => { input.style.animation = ''; }, 500);
+            }
+        }
+        function saveProgress(challengeId) {
+            const saved = localStorage.getItem('ctf_progress');
+            const progress = saved ? JSON.parse(saved) : [];
+            if (!progress.includes(challengeId)) {
+                progress.push(challengeId);
+                localStorage.setItem('ctf_progress', JSON.stringify(progress));
+            }
+        }
+        document.getElementById('flag-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateFlag();
+        });
+        document.getElementById('flag-input').focus();
+    </script>
+</body>
+</html>
