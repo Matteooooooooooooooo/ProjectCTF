@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Défi 6 - ROT13</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { max-width: 700px; background: white; padding: 50px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #a8edea; margin-bottom: 10px; font-size: 2em; }
+        .challenge-badge { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #333; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-bottom: 25px; font-weight: 700; font-size: 0.9em; }
+        .scenario { background: #f8fafc; padding: 25px; border-radius: 15px; margin: 25px 0; border-left: 5px solid #a8edea; }
+        .scenario h3 { color: #5dd5d5; margin-bottom: 15px; }
+        p { line-height: 1.8; color: #475569; margin-bottom: 15px; }
+        .cipher-message {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            margin: 25px 0;
+            text-align: center;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .hint { background: #fef3c7; padding: 20px; border-radius: 10px; margin: 25px 0; border-left: 4px solid #f59e0b; }
+        .hint strong { color: #b45309; }
+        .flag-input-section { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 30px; border-radius: 15px; margin-top: 30px; border: 2px solid #a8edea; }
+        .flag-input-title { color: #5dd5d5; font-weight: 700; margin-bottom: 20px; font-size: 1.2em; }
+        .flag-input-container { display: flex; gap: 10px; margin-bottom: 15px; }
+        .flag-input { flex: 1; padding: 14px 18px; border: 2px solid #a8edea; border-radius: 10px; font-size: 1em; font-family: 'Courier New', monospace; }
+        .submit-btn { padding: 14px 30px; background: linear-gradient(135deg, #a8edea, #fed6e3); color: #333; border: none; border-radius: 10px; font-size: 1em; font-weight: 700; cursor: pointer; }
+        .message { padding: 15px; border-radius: 10px; margin-top: 15px; font-weight: 600; display: none; }
+        .message.success { background: #d1fae5; border: 2px solid #10b981; color: #065f46; display: block; }
+        .message.error { background: #fee2e2; border: 2px solid #ef4444; color: #991b1b; display: block; }
+        .back-btn { display: inline-block; margin-top: 25px; padding: 12px 25px; background: #64748b; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="challenge-badge">DÉFI 6 - MOYEN</span>
+        <h1>🔄 Chiffrement ROT13</h1>
+        <div class="scenario">
+            <h3>📖 Contexte</h3>
+            <p>En auditant une vieille application, tu découvres qu'elle utilise un système de "chiffrement" pour protéger certaines données. En analysant le code, tu réalises que l'algorithme utilisé date de l'époque romaine : ROT13, qui se contente de décaler les lettres de 13 positions dans l'alphabet.</p>
+            <p>Le développeur senior te dit : "C'est du chiffrement, personne ne peut le décoder sans la clé !" Vraiment ? 🤔</p>
+        </div>
+        <p><strong>🎯 Ta mission :</strong> Déchiffre le message ROT13 ci-dessous pour récupérer le flag.</p>
+        <div class="cipher-message">
+            SYNT{e0g13_vf_gbb_jrnx}
+        </div>
+        <div class="hint">
+            <strong>💡 Indice :</strong> ROT13 remplace chaque lettre par celle qui est 13 positions plus loin (A→N, B→O, etc.). Utilise <a href="https://www.challenges-kids.fr/cyberchef/" target="_blank" style="color: #5dd5d5; font-weight: 600;">CyberChef</a> avec la recette "ROT13", ou cherche simplement "rot13 decoder" en ligne !
+        </div>
+        <div class="flag-input-section">
+            <div class="flag-input-title">🚩 Valider le flag</div>
+            <div class="flag-input-container">
+                <input type="text" class="flag-input" id="flag-input" placeholder="FLAG{...}" autocomplete="off">
+                <button class="submit-btn" onclick="validateFlag()">Valider</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+        <a href="index.html" class="back-btn">← Retour aux défis</a>
+    </div>
+    <script>
+        const correctFlag = "FLAG{r0t13_is_too_weak}";
+        function validateFlag() {
+            const input = document.getElementById('flag-input');
+            const message = document.getElementById('message');
+            const userFlag = input.value.trim();
+            if (userFlag === correctFlag) {
+                message.className = 'message success';
+                message.textContent = '✅ Parfait ! ROT13 n\'est PAS un chiffrement sécurisé ! Défi 6 complété ! 🎉';
+                saveProgress(6);
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            } else {
+                message.className = 'message error';
+                message.textContent = '❌ Pas tout à fait... Utilise un décodeur ROT13 pour décrypter le message !';
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => { input.style.animation = ''; }, 500);
+            }
+        }
+        function saveProgress(challengeId) {
+            const saved = localStorage.getItem('ctf_progress');
+            const progress = saved ? JSON.parse(saved) : [];
+            if (!progress.includes(challengeId)) {
+                progress.push(challengeId);
+                localStorage.setItem('ctf_progress', JSON.stringify(progress));
+            }
+        }
+        document.getElementById('flag-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateFlag();
+        });
+        document.getElementById('flag-input').focus();
+    </script>
+</body>
+</html>
