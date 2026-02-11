@@ -840,15 +840,17 @@
     }
 
     // --- BASE64 DES FLAGS ---
-    async function getFlagMapping() {
+async function getFlagMapping() {
+        // Utilitaire de décodage interne (atob décode le Base64)
         const d = (s) => atob(s);
+
         return {
             "f1": d("RkxBR3sxbnNwM2N0X3RoM19zMHVyYzNfYzBkM30="),
             "f2": d("RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ=="),
             "f3": d("RkxBR3t1cmxfcDRyNG0zdDNyc180cjNfdjFzMWJsM30="),
             "f4": d("RkxBR3tjMDBrMTNzXzRyM19uMHRfczRmM30="),
             "f5": d("RkxBR3tjMG5zMGwzX2wwZ3NfbDM0ay1kNHQ0fQ=="),
-            "f6": d("RkxBR3tyMHQxM19pcy90b29fd2Vha30="),
+            "f6": d("RkxBR3tyMHQxM19pc190b29fd2Vha30="),
             "f7": d("RkxBR3toMWRkM25fM2wzbTNudHNfNHIzX3YxczFibDN9"),
             "f8": d("RkxBR3tqNHY0c2NyMXB0XzFzX3B1YmxpY30=")
         };
@@ -861,11 +863,17 @@
         tableBody.innerHTML = '';
 
         const titles = [
-            "Inspection du Code Source", "Décodage Base64", "Paramètres URL", 
-            "Cookies Non Sécurisés", "Console JavaScript", "Chiffrement ROT13", 
-            "Éléments HTML Cachés", "Code JavaScript Exposé"
+            "Inspection du Code Source", 
+            "Décodage Base64", 
+            "Paramètres URL", 
+            "Cookies Non Sécurisés", 
+            "Console JavaScript", 
+            "Chiffrement ROT13", 
+            "Éléments HTML Cachés", 
+            "Code JavaScript Exposé"
         ];
 
+        // Remplissage automatique du tableau admin
         Object.keys(flagsObj).forEach((key, index) => {
             const flag = flagsObj[key];
             const row = document.createElement('tr');
@@ -887,6 +895,7 @@
 </script>
 </body>
 </html>
+
 
 
 
