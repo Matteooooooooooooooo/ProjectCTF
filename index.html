@@ -734,231 +734,161 @@
         </footer>
     </div>
 
-    <script>
-        // Données des défis
-        const challenges = [
-            {
-                id: 1,
-                title: "Inspection du Code Source",
-                description: "Découvre le secret caché dans les commentaires HTML",
-                difficulty: "Facile"
-            },
-            {
-                id: 2,
-                title: "Décodage Base64",
-                description: "Décode un message pour révéler le flag",
-                difficulty: "Facile"
-            },
-            {
-                id: 3,
-                title: "Paramètres URL",
-                description: "Analyse l'URL pour trouver le flag",
-                difficulty: "Facile"
-            },
-            {
-                id: 4,
-                title: "Cookies Non Sécurisés",
-                description: "Explore les cookies du navigateur",
-                difficulty: "Moyen"
-            },
-            {
-                id: 5,
-                title: "Console JavaScript",
-                description: "Cherche dans les logs de la console",
-                difficulty: "Moyen"
-            },
-            {
-                id: 6,
-                title: "Chiffrement ROT13",
-                description: "Casse un chiffrement simple",
-                difficulty: "Moyen"
-            },
-            {
-                id: 7,
-                title: "Éléments HTML Cachés",
-                description: "Trouve ce qui est caché avec CSS",
-                difficulty: "Difficile"
-            },
-            {
-                id: 8,
-                title: "Code JavaScript Exposé",
-                description: "Fouille dans le code source JavaScript",
-                difficulty: "Difficile"
+<script>
+    // Configuration des défis
+    const challenges = [
+        { id: 1, title: "Inspection du Code Source", description: "Découvre le secret caché dans les commentaires HTML", difficulty: "Facile" },
+        { id: 2, title: "Décodage Base64", description: "Décode un message pour révéler le flag", difficulty: "Facile" },
+        { id: 3, title: "Paramètres URL", description: "Analyse l'URL pour trouver le flag", difficulty: "Facile" },
+        { id: 4, title: "Cookies Non Sécurisés", description: "Explore les cookies du navigateur", difficulty: "Moyen" },
+        { id: 5, title: "Console JavaScript", description: "Cherche dans les logs de la console", difficulty: "Moyen" },
+        { id: 6, title: "Chiffrement ROT13", description: "Casse un chiffrement simple", difficulty: "Moyen" },
+        { id: 7, title: "Éléments HTML Cachés", description: "Trouve ce qui est caché avec CSS", difficulty: "Difficile" },
+        { id: 8, title: "Code JavaScript Exposé", description: "Fouille dans le code source JavaScript", difficulty: "Difficile" }
+    ];
+
+    // Gestion de la progression (localStorage)
+    function getProgress() {
+        const saved = localStorage.getItem('ctf_progress');
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    function updateProgressBar() {
+        const progress = getProgress();
+        const percentage = (progress.length / 8) * 100;
+        document.getElementById('progress-count').textContent = progress.length;
+        const fill = document.getElementById('progress-fill');
+        fill.style.width = percentage + '%';
+        fill.textContent = Math.round(percentage) + '%';
+    }
+
+    function isUnlocked(challengeId) {
+        if (challengeId === 1) return true;
+        return getProgress().includes(challengeId - 1);
+    }
+
+    function renderChallenges() {
+        const grid = document.getElementById('challenges-grid');
+        grid.innerHTML = '';
+
+        challenges.forEach(challenge => {
+            const unlocked = isUnlocked(challenge.id);
+            const completed = getProgress().includes(challenge.id);
+            
+            const card = document.createElement('div');
+            card.className = `challenge-card ${!unlocked ? 'locked' : ''} ${completed ? 'completed' : ''}`;
+            
+            card.innerHTML = `
+                <span class="challenge-number">DÉFI ${challenge.id}</span>
+                <div class="challenge-title">${challenge.title}</div>
+                <div class="challenge-desc">${challenge.description}</div>
+                <div style="margin-top: 15px; font-size: 0.85em; color: #64748b;">
+                    <strong>Difficulté :</strong> ${challenge.difficulty}
+                </div>
+            `;
+
+            if (unlocked) {
+                card.onclick = () => { window.location.href = `defi${challenge.id}.html`; };
             }
+            grid.appendChild(card);
+        });
+        updateProgressBar();
+    }
+
+    // Navigation entre les sections
+    function showSection(sectionId) {
+        if (sectionId !== 'admin') {
+            document.getElementById('admin-login').style.display = 'block';
+            document.getElementById('admin-content').classList.remove('unlocked');
+            document.getElementById('admin-password').value = '';
+        }
+
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        if (event && event.target.tagName === 'A') event.target.classList.add('active');
+        
+        if (sectionId === 'ctf') renderChallenges();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Système de déverrouillage Admin
+    async function unlockAdmin() {
+        const password = document.getElementById('admin-password').value;
+        const hash = await hashPassword(password);
+        const correctHash = "d935a2d57cba2e5e3ad631ebb17f2c5d94ac046ec7498edd5c99d7a886baed56"; // Hash de KMN2008
+        
+        if (hash === correctHash) {
+            document.getElementById('admin-login').style.display = 'none';
+            document.getElementById('admin-content').classList.add('unlocked');
+            await renderAdminTable();
+        } else {
+            const msg = document.getElementById('admin-message');
+            msg.className = 'message error';
+            msg.textContent = '❌ Mot de passe incorrect !';
+            document.getElementById('admin-password').style.animation = 'shake 0.5s';
+            setTimeout(() => { document.getElementById('admin-password').style.animation = ''; }, 500);
+        }
+    }
+
+    async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // --- SECTION SÉCURISÉE : FLAGS ENCODÉS EN BASE64 ---
+    async function getFlagMapping() {
+        // Utilitaire de décodage interne
+        const decode = (s) => atob(s);
+
+        // Les flags sont stockés ici en Base64 pour ne pas être lisibles directement
+        return {
+            "flag1": decode("RkxBR3sxbnNwM2N0X3RoM19zMHVyYzNfYzBkM30="),
+            "flag2": decode("RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ=="),
+            "flag3": decode("RkxBR3t1cmxfcDRyNG0zdDNyc180cjNfdjFzMWJsM30="),
+            "flag4": decode("RkxBR3tjMDBrMTNzXzRyM19uMHRfczRmM30="),
+            "flag5": decode("RkxBR3tjMG5zMGwzX2wwZ3NfbDM0ay1kNHQ0fQ=="),
+            "flag6": decode("RkxBR3toMWRkM25fM2wzbTNudHNfNHIzX3YxczFibDN9"),
+            "flag7": decode("RkxBR3toMWRkM25fM2wzbTNudHNfNHIzX3YxczFibDN9"),
+            "flag8": decode("RkxBR3tqNHY0c2NyMXB0XzFzX3B1YmxpY30=")
+        };
+    }
+
+    async function renderAdminTable() {
+        const flagsObj = await getFlagMapping();
+        const tableBody = document.querySelector('.flag-table tbody');
+        tableBody.innerHTML = '';
+
+        const challengeTitles = [
+            "Inspection du Code Source", "Décodage Base64", "Paramètres URL", 
+            "Cookies Non Sécurisés", "Console JavaScript", "Chiffrement ROT13", 
+            "Éléments HTML Cachés", "Code JavaScript Exposé"
         ];
 
-        // Gestion de la progression
-        function getProgress() {
-            const saved = localStorage.getItem('ctf_progress');
-            return saved ? JSON.parse(saved) : [];
-        }
-
-        function saveProgress(challengeId) {
-            const progress = getProgress();
-            if (!progress.includes(challengeId)) {
-                progress.push(challengeId);
-                localStorage.setItem('ctf_progress', JSON.stringify(progress));
-            }
-            updateProgressBar();
-        }
-
-        function updateProgressBar() {
-            const progress = getProgress();
-            const percentage = (progress.length / 8) * 100;
-            document.getElementById('progress-count').textContent = progress.length;
-            document.getElementById('progress-fill').style.width = percentage + '%';
-            document.getElementById('progress-fill').textContent = Math.round(percentage) + '%';
-        }
-
-        function isUnlocked(challengeId) {
-            if (challengeId === 1) return true;
-            const progress = getProgress();
-            return progress.includes(challengeId - 1);
-        }
-
-        function isCompleted(challengeId) {
-            return getProgress().includes(challengeId);
-        }
-
-        function renderChallenges() {
-            const grid = document.getElementById('challenges-grid');
-            grid.innerHTML = '';
-
-            challenges.forEach(challenge => {
-                const unlocked = isUnlocked(challenge.id);
-                const completed = isCompleted(challenge.id);
-                
-                const card = document.createElement('div');
-                card.className = `challenge-card ${!unlocked ? 'locked' : ''} ${completed ? 'completed' : ''}`;
-                
-                card.innerHTML = `
-                    <span class="challenge-number">DÉFI ${challenge.id}</span>
-                    <div class="challenge-title">${challenge.title}</div>
-                    <div class="challenge-desc">${challenge.description}</div>
-                    <div style="margin-top: 15px; font-size: 0.85em; color: #64748b;">
-                        <strong>Difficulté :</strong> ${challenge.difficulty}
-                    </div>
-                `;
-
-                if (unlocked) {
-                    card.onclick = () => {
-                        window.location.href = `defi${challenge.id}.html`;
-                    };
-                }
-
-                grid.appendChild(card);
-            });
-
-            updateProgressBar();
-        }
-
-        // Navigation
-        function showSection(sectionId) {
-            // Auto-lock admin when leaving the section
-            if (sectionId !== 'admin') {
-                document.getElementById('admin-login').style.display = 'block';
-                document.getElementById('admin-content').classList.remove('unlocked');
-                document.getElementById('admin-password').value = '';
-                const message = document.getElementById('admin-message');
-                if (message) message.style.display = 'none';
-            }
-
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
-            
-            document.querySelectorAll('nav a').forEach(link => {
-                link.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            if (sectionId === 'ctf') {
-                renderChallenges();
-            }
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Admin - Secured with SHA-256
-        async function unlockAdmin() {
-            const password = document.getElementById('admin-password').value;
-            const message = document.getElementById('admin-message');
-            
-            // Hash du mot de passe avec SHA-256
-            const hash = await hashPassword(password);
-            // Hash SHA-256 de "KMN2008" - le mot de passe n'est JAMAIS stocké en clair
-            const correctHash = "d935a2d57cba2e5e3ad631ebb17f2c5d94ac046ec7498edd5c99d7a886baed56";
-            
-            if (hash === correctHash) {
-                document.getElementById('admin-login').style.display = 'none';
-                document.getElementById('admin-content').classList.add('unlocked');
-                renderAdminTable();
-            } else {
-                message.className = 'message error';
-                message.textContent = '❌ Mot de passe incorrect !';
-                
-                const input = document.getElementById('admin-password');
-                input.style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    input.style.animation = '';
-                }, 500);
-            }
-        }
-
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
-
-        function renderAdminTable() {
-            const progress = getProgress();
-            
-            // Flags chiffrés - impossible à lire directement dans le code
-            const encryptedFlags = [
-                { id: 1, title: "Inspection du Code Source", enc: "RkxBR3sxbnNwM2N0X3RoM19zMHVyYzNfYzBkM30=" },
-                { id: 2, title: "Décodage Base64", enc: "RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ==" },
-                { id: 3, title: "Paramètres URL", enc: "RkxBR3t1cmxfcDRyNG0zdDNyc180cjNfdjFzMWJsM30=" },
-                { id: 4, title: "Cookies Non Sécurisés", enc: "FLAG{c00k13s_4r3_n0t_p4f3}" },
-                { id: 5, title: "Console JavaScript", enc: "RkxBR3tjMG5zMGwzX2wwZ3NfbDM0a19kNHQ0fQ==" },
-                { id: 6, title: "Chiffrement ROT13", enc: "RkxBR3tyMHQxM19pc190b29fd2Vha30=" },
-                { id: 7, title: "Éléments HTML Cachés", enc: "RkxBR3toMWRkM25fM2wzbTNudHNfNHIzX3YxczFibDN9" },
-                { id: 8, title: "Code JavaScript Exposé", enc: "RkxBR3tqNHY0c2NyMXB0XzFzX3B1YmwxY30=" }
-            ];
-
-            const tableBody = document.querySelector('.flag-table tbody');
-            tableBody.innerHTML = '';
-
-            // Déchiffrer et afficher tous les flags
-            encryptedFlags.forEach(item => {
-                const completed = progress.includes(item.id);
-                const flag = atob(item.enc); // Déchiffrement Base64
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><strong>Défi ${item.id}</strong> ${completed ? '<span style="color: #10b981; font-size: 1.2em;">✓</span>' : ''}</td>
-                    <td>${item.title}</td>
-                    <td><code>${flag}</code></td>
-                    <td><button class="copy-btn" onclick="copyFlag('${flag}')">Copier</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        function copyFlag(flag) {
-            navigator.clipboard.writeText(flag).then(() => {
-                alert('✅ Flag copié : ' + flag);
-            });
-        }
-
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            renderChallenges();
+        // On parcourt les flags pour remplir le tableau admin
+        Object.keys(flagsObj).forEach((key, index) => {
+            const flag = flagsObj[key];
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>Défi ${index + 1}</strong></td>
+                <td>${challengeTitles[index]}</td>
+                <td><code>${flag}</code></td>
+                <td><button class="copy-btn" onclick="copyFlag('${flag}')">Copier</button></td>
+            `;
+            tableBody.appendChild(row);
         });
-    </script>
+    }
+
+    function copyFlag(flag) {
+        navigator.clipboard.writeText(flag).then(() => { alert('✅ Flag copié !'); });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderChallenges);
+</script>
 </body>
 </html>
+
 
