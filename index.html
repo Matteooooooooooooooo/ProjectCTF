@@ -795,7 +795,6 @@
         updateProgressBar();
     }
 
-    // Navigation entre les sections
     function showSection(sectionId) {
         if (sectionId !== 'admin') {
             document.getElementById('admin-login').style.display = 'block';
@@ -813,11 +812,10 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Système de déverrouillage Admin
     async function unlockAdmin() {
         const password = document.getElementById('admin-password').value;
         const hash = await hashPassword(password);
-        const correctHash = "d935a2d57cba2e5e3ad631ebb17f2c5d94ac046ec7498edd5c99d7a886baed56"; // Hash de KMN2008
+        const correctHash = "d935a2d57cba2e5e3ad631ebb17f2c5d94ac046ec7498edd5c99d7a886baed56"; // KMN2008
         
         if (hash === correctHash) {
             document.getElementById('admin-login').style.display = 'none';
@@ -827,8 +825,6 @@
             const msg = document.getElementById('admin-message');
             msg.className = 'message error';
             msg.textContent = '❌ Mot de passe incorrect !';
-            document.getElementById('admin-password').style.animation = 'shake 0.5s';
-            setTimeout(() => { document.getElementById('admin-password').style.animation = ''; }, 500);
         }
     }
 
@@ -839,21 +835,19 @@
         return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // --- SECTION SÉCURISÉE : FLAGS ENCODÉS EN BASE64 ---
+    // --- FLAGS ENCODÉS EN BASE64 ---
     async function getFlagMapping() {
-        // Utilitaire de décodage interne
         const decode = (s) => atob(s);
 
-        // Les flags sont stockés ici en Base64 pour ne pas être lisibles directement
         return {
-            "flag1": decode("RkxBR3sxbnNwM2N0X3RoM19zMHVyYzNfYzBkM30="),
-            "flag2": decode("RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ=="),
-            "flag3": decode("RkxBR3t1cmxfcDRyNG0zdDNyc180cjNfdjFzMWJsM30="),
-            "flag4": decode("RkxBR3tjMDBrMTNzXzRyM19uMHRfczRmM30="),
-            "flag5": decode("RkxBR3tjMG5zMGwzX2wwZ3NfbDM0ay1kNHQ0fQ=="), // Nouveau Flag 5
-            "flag6": decode("RkxBR3tyMHQxM19pc190b29fd2Vha30="),          // Nouveau Flag 6
-            "flag7": decode("RkxBR3toMWRkM25fM2wzbTNudHNfNHIzX3YxczFibDN9"),
-            "flag8": decode("RkxBR3tqNHY0c2NyMXB0XzFzX3B1YmxpY30=")        // Nouveau Flag 8
+            "f1": decode("RkxBR3sxbnNwM2N0X3RoM19zMHVyYzNfYzBkM30="),
+            "f2": decode("RkxBR3tiNHMzNjRfMXNfbjB0X3MzY3VyMXR5fQ=="),
+            "f3": decode("RkxBR3t1cmxfcDRyNG0zdDNyc180cjNfdjFzMWJsM30="),
+            "f4": decode("RkxBR3tjMDBrMTNzXzRyM19uMHRfczRmM30="),
+            "f5": decode("RkxBR3tjMG5zMGwzX2wwZ3NfbDM0ay1kNHQ0fQ=="), // Nouveau
+            "f6": decode("RkxBR3tyMHQxM19pc190b29fd2Vha30="),          // Nouveau
+            "f7": decode("RkxBR3toMWRkM25fM2wzbTNudHNfNHIzX3YxczFibDN9"),
+            "f8": decode("RkxBR3tqNHY0c2NyMXB0XzFzX3B1YmxpY30=")        // Nouveau
         };
     }
 
@@ -868,7 +862,6 @@
             "Éléments HTML Cachés", "Code JavaScript Exposé"
         ];
 
-        // On parcourt les flags pour remplir le tableau admin
         Object.keys(flagsObj).forEach((key, index) => {
             const flag = flagsObj[key];
             const row = document.createElement('tr');
@@ -890,6 +883,7 @@
 </script>
 </body>
 </html>
+
 
 
 
